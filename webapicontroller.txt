@@ -1,0 +1,3408 @@
+ ASP.NET Web API 
+- Build secure REST APIs on any platform with C#.
+- ASP.NET makes it easy to build services that reach a broad range of clients, including browsers and mobile devices.
+- You can use the same framework and patterns to build both web pages and services, side-by-side.
+
+Features:
+
+*This is the new framework for building HTTP services with easy and simple way.
+
+*Web API is open source an ideal platform for building REST-ful services over the .NET Framework.
+Unlike WCF Rest service, it use the full featues of HTTP (like URIs, request/response headers, caching, versioning, various content formats)
+
+*It also supports the MVC features such as routing, controllers, action results, filter, model binders, IOC container or dependency injection, unit testing that makes it more simple and robust.
+
+*It can be hosted with in the application or on IIS.
+
+*It is light weight architecture and good for devices which have limited bandwidth like smart phones.
+Responses are formatted by Web API’s MediaTypeFormatter into JSON, XML or whatever format you want to add as a MediaTypeFormatter.
+
+	          Web API Architecture
+
+- Client Side
+	1. HTML
+	2. CSS
+	3. JavaScript, JQuery, Angular Js, 
+	    Angular 2x, React, Vue, Blazor with C#
+	4. Cordova, NativeScript, Ionic
+- Server Side
+	1. C#  language
+	2. ASP.NET Framework with MVC
+	3. ADO.NET, 
+	    ADO.NET EF, 
+	    ADO.NET EF Core	
+- Database
+	1. Sql Server
+	2. Sql Server Local
+	3. MongoDb  etc..
+	    
+		Web API 2
+.NET Framework 4.5+   	[Latest 4.8]
+ASP.NET Framework 4.5+	[Latest 4.8]
+C# 6+			[Latest 8]
+Visual Studio 2019		[Latest 2019 - 16.5]
+
+- Download and Install - Visual Studio 2019
+	https://visualstudio.microsoft.com/vs/
+- Download .NET Core 3.1
+	https://dotnet.microsoft.com/download
+- Goto Command Prompt
+	> dotnet  --info
+
+1. Open Visual Studio 2019
+2. Create New Project
+3. Select the Project Template
+	"ASP.NET Web Application"
+	       (.NET Framework)
+  Project Name	: ShoppingAPI
+  Location		: C:\WebAPIProjects
+  .NET Framework	: 4.7.2
+
+4. Select Web Application Template
+	"Web API"
+     [References for Web API and MVC are Selected]
+
+5. Select Authentication Type
+	"No Authentication"
+
+     [ Later you can choose: Windows, Individual User Accounts, Work and Organizational .. ]
+
+6. Goto "Advanced" category and Choose
+	 "Configure for Https"
+    [ It will download SSL certificate of you application]
+	    Secure Socket Layer
+7. Click Create
+
+
+Web API Project Structure:
+======================
+
+Component	Description
+---------------------------------------------------------------------------
+Connected Services   It shows all 3rd party services
+	                    connected to your application.
+		  it includes Azure, WCF services.
+
+App_Data		It comprises of local database
+		files like : ".mdf", ".sdf"
+
+App_Start		It comprises of classes that are
+		intended  to run on application
+		statup. It includes
+		  - RouteConfig.cs
+		  - BundleConfig.cs
+		  - FilterConfig.cs
+		  - WebApiConfig.cs
+
+Areas		It comprises of components
+		required for various domains
+		in same application. 
+		The components are cleanly
+		separated with individual 
+		controller, model and views.
+
+Controllers	Contains application specific
+		logic.
+
+Models		Contains data sepcific logic.
+
+Views		Contains Application UI.
+
+Content		It comprises of non-dynamic files
+		like CSS.
+
+Scripts		It comprises of dynamic files
+		like ".js".
+
+Font		It comprises of bootstrap fonts.
+
+Global.asax	It is global application class file.
+
+Web.Config	It is application configuration 		file.
+
+Package.config	It contains the list of packages
+		installed for your project.
+		NuGet Packages like
+		- EF, Bootstrap, Ajax, JQuery etc.
+       Web API Controller
+- Controller is the core MVC component.
+- It controls the overall application flow.
+- It comprises of Application Specific Logic.
+- It handels the request from consumer and process the request.
+- It generates a response back to the consumer.
+- Technically in ASP.NET Web API controller is a C# class.
+- It is derived from "ApiController" base class.
+- The library for Web API is defined in 
+	"System.Web.Http"
+- "ApiController" is a class defined in "System.Web.Http".
+- All Controller classes must be in "Controllers" folder
+         [Requests are Mapped to Controllers folder]
+
+- Every controller class must have the suffix 
+	"Controller"
+
+Adding a Controller into Project:
+----------------------------------------------
+ There are 2 ways to add a API controller class
+
+1. By using Scaffolding
+2. Manually adding a new Item and configuring as Controller.
+
+Manually Adding API Controller:
+- Right Click on Controllers folder
+- Add ? New Item
+- Select "C# Class"
+- Name it as "ProductsController.cs"
+- Add into Project
+- Import the namespace "System.Web.Http"
+- Implement "ApiController" base class
+
+Syntax:
+using System.Web.Http;
+namespace ShoppingAPI.Controllers
+{
+    public class ProductsController : ApiController
+    {
+    }
+}
+
+Add Controller by using Scaffoling:
+- Right Click on Controllers folder
+- Add ? New ? Controller
+- Select "Web API 2 Empty Controller"
+- Name
+	"CategoriesController"
+- Add
+  Web API Action Methods
+- Action Method is a special type of method that is responsible for handling request from client and send  a customized response for every request.
+- IHttpActionResult  specifies what a controller action method must return. It is the base for all API results.
+- Usually API action method returns an Http Status code as a response.
+- Web API Action method
+	- It must be public in access
+	- It can't be a private, protected or internal
+	  method.
+	- It can't be static
+	- It must return a value
+	- It must be defined with a return type
+	- It can't be void
+	- It can overload
+	- It can't override
+
+Syntax:
+public IHttpActionResult GetProducts()
+        {
+            return Ok("Reponse from Get Products Success..");
+        }
+
+- The default Web API action methods are configured to handle Http -GET request from client.
+
+- You can specifiy action method to handle various request by using "HttpVerbs" defined through "AcceptVerbs" annotation.
+
+- Commonly uses HttpVerbs are
+	GET
+	POST
+	PUT
+	DELETE
+	OPTIONS
+	PURGE etc..
+
+Syntax:
+	[AcceptVerbs("GET")]
+	             or
+	[HttpGet]
+
+Ex: Add a new API Empty Controller
+	       "ProductsController.cs"
+
+using System.Web.Http;
+
+namespace ShoppingAPI.Controllers
+{
+    public class ProductsController : ApiController
+    {
+        //Action Method
+        public IHttpActionResult GetProducts()
+        {
+            return Ok("Reponse from Get Products Success..");
+        }
+        [HttpPost]
+        public IHttpActionResult AddProduct()
+        {
+            return Ok("Record Inserted into Database");
+        }
+    }
+}
+
+- Every Controller Action Method is handled by using ActionFilter
+- ActionFilter is derived from "ActionFilterAttribute"
+- Every Controller Action method is processed by using following methods
+	a) OnActionExecuting()
+	b) OnActionExecuted()
+	c) OnResultExecuting()
+	d) OnResultExecuted()
+
+FAQ: What is the purpose of ActionFilter in API Controller?
+A. Action Filters are used to handle pre and post action functionality.
+
+FAQ: Tell me some activities maintained "Pre Action" executing?
+A. Authentication and Authorization
+
+FAQ: Tell me some activities maintained "Post Action" execution?
+A. Caching, Logging
+
+FAQ: What is the role of ActionSelectors in API Controller? [AcceptVerbs] - [HttpGet]
+A. Action Selectors are used to handle "Request Behavior"
+
+
+FAQ: How ActionFilter Maps to Action Method in Controller?
+A:  By using "ActionExecutingContext" [FilterContext]
+	        |_ActionDescriptor
+	           |_Action Name  [GetProducts]
+	           |_ControllerDescriptor
+	              |_ControllerName [Products]
+
+
+              Basic Web API Routes 
+- Routing is a Technique used in Web Application to configure User and SEO friendly URL's.
+
+Without Routing:
+http://www.amazon.in/products.aspx?category= electronics&subCategory=Mobiles
+
+With Routing:
+http://www.amazon.in/products/electronics/mobiles
+
+- Routing is required in Web API to handle the requests from the consumer.
+
+App_Start Folder :  It contains the "WebApiConfig.cs"
+	               where the API routes are 
+	               configured.
+
+Note: MVC routes are configured in "RouteConfig.cs"
+          in the folder "App_start".
+
+          Application Routes are in RouteConfig.cs
+          Service Routes are in WebApiConfig.cs
+
+           templateUrl: api/controllerName/parameter
+
+Syntax: WebApiConfig.cs
+ config.Routes.MapHttpRoute(
+                name: "DefaultApi",
+                routeTemplate: "api/{controller}/{id}",
+                defaults: new { id = RouteParameter.Optional }
+            );
+
+Syntax: ProductsController
+public class ProductsController : ApiController
+    {
+        //GET - api/products
+        public IHttpActionResult GetProducts()
+        {
+            return Ok("This is a GET Request to Access all Products");
+        }  
+        //GET - api/products/2
+        public IHttpActionResult GetProduct(int? id)
+        {
+            return Ok("This is a GET Request with Id Parameter");
+        }
+    }
+
+FAQ: Can we define multiple actions for same request?
+A. No . Better change the route request url to accept action.
+
+ routeTemplate: "api/{controller}/{action}/{id}",
+
+
+Ex:
+public class ProductsController : ApiController
+    {
+        //GET - api/products/GetProducts
+        public IHttpActionResult GetProducts()
+        {
+            return Ok("This is a GET Request to Access all Products");
+        }  
+        //GET - api/products/GetProduct/1
+        public IHttpActionResult GetProduct(int? id)
+        {
+            return Ok("This is a GET Request with Id Parameter");
+        }
+        //api/products/GetCategories
+        public IHttpActionResult GetCategories()
+        {
+            return Ok("This is a GET Request to access all categories");
+        }
+    }
+	        ADO.NET EF
+
+
+
+
+   Database Related Logic using ADO.NET
+	         [ CRUD Operations ]
+
+1. Create a new Database on Sql Server 
+	Name	: ApiDb
+	Table	: tblproducts
+	Fields:	
+	        ProductId int (PK) -AutoGenerated
+	        Name varchar
+	        Price money
+2. Create Stored Procedures
+	- spGetProducts
+	- spAddProducts
+	- spUpdateProducts
+	- spDeleteProducts
+
+3. Goto Web API 2 Project  
+4. Goto "Web.Config" and write the connection string.
+
+<connectionStrings>
+    <add name="ApiConnection" providerName="System.Data.SqlClient" connectionString="Data Source=(local); Initial Catalog=ApiDb; user id=sa; password=123"/>
+</connectionStrings>
+
+5. Add a new Project into your solution
+      Project Type : C# Class Library (.NET Framework)
+	                     [.dll]
+      Name	           : BusinessLayer
+
+6. Add folder
+	- Contracts
+	- Services
+
+7. Add following files into contracts
+	- IProduct.cs
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace BusinessLayer.Contracts
+{
+    interface IProduct
+    {
+        int ProductId { get; set; }
+        string Name { get; set; }
+        decimal? Price { get; set; }
+    }
+}
+
+
+	- IProductCRUDContract.cs
+
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace BusinessLayer.Contracts
+{
+    interface IProductsCRUDContract
+    {
+        void AddProduct();
+        void UpdateProduct();
+        void DeleteProduct();
+    }
+}
+
+8. Add following files into Services folder
+	Product.cs
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using BusinessLayer.Contracts;
+
+namespace BusinessLayer.Services
+{
+    public class Product : IProduct
+    {
+        public int ProductId { get; set; }
+        public string Name { get; set; }
+        public decimal? Price { get; set; }
+    }
+}
+
+	 ProductsCRUDService.cs
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using BusinessLayer.Contracts;
+using System.Configuration;
+using System.Data;
+using System.Data.SqlClient;
+
+namespace BusinessLayer.Services
+{
+    public class ProductsCRUDService : IProductsCRUDContract
+    {
+        string strcon = ConfigurationManager.ConnectionStrings["ApiConnection"].ToString();
+        SqlConnection con;
+        SqlCommand cmd;
+
+        public IEnumerable<Product> GetProducts
+        {
+            get
+            {
+                List<Product> products = new List<Product>();
+                con = new SqlConnection(strcon);
+                con.Open();
+                cmd = new SqlCommand("spGetProducts", con);
+                SqlDataReader dr = cmd.ExecuteReader();
+                while(dr.Read())
+                {
+                    Product product = new Product();
+                    product.ProductId = Convert.ToInt32(dr["ProductId"]);
+                    product.Name = dr["Name"].ToString();
+                    product.Price = Convert.ToDecimal(dr["Price"]);
+                    products.Add(product);
+                }
+                dr.Close();
+                con.Close();
+                return products;
+            }
+        }
+        public void AddProduct()
+        {
+
+        }
+        public void UpdateProduct()
+        {
+
+        }
+        public void DeleteProduct()
+        {
+
+        }
+    }
+}
+Business Layer - ADO.NET
+1. Added a Business Layer
+	C# Class Library
+2. Added Contracts folder
+	IProduct.cs
+	  - rules for fields in order to interact with
+	    DB table.
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace BusinessLayer.Contracts
+{
+    interface IProduct
+    {
+        int ProductId { get; set; }
+        string Name { get; set; }
+        decimal? Price { get; set; }
+    }
+}
+
+	IProductsCRUD.cs
+	   - rules for methods to handle CRUD
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace BusinessLayer.Contracts
+{
+    interface IProductsCRUDContract
+    {
+        void AddProduct(string Name, decimal? Price);
+        void UpdateProduct(int ProductId, string Name, decimal? Price);
+        void DeleteProduct(int ProductId);
+    }
+}
+
+3. Added Services folder to implement contracts
+	-Product.cs
+	   implementation of  DB fields
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using BusinessLayer.Contracts;
+
+namespace BusinessLayer.Services
+{
+    public class Product : IProduct
+    {
+        public int ProductId { get; set; }
+        public string Name { get; set; }
+        public decimal? Price { get; set; }
+    }
+}
+	-ProductsCRUDService.cs
+	   implementation of CRUDb methods
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using BusinessLayer.Contracts;
+using System.Configuration;
+using System.Data;
+using System.Data.SqlClient;
+
+namespace BusinessLayer.Services
+{
+    public class ProductsCRUDService : IProductsCRUDContract
+    {
+        string strcon = ConfigurationManager.ConnectionStrings["ApiConnection"].ToString();
+        SqlConnection con;
+        SqlCommand cmd;
+        //Read
+        public IEnumerable<Product> GetProducts
+        {
+            get
+            {
+                List<Product> products = new List<Product>();
+                con = new SqlConnection(strcon);
+                con.Open();
+                cmd = new SqlCommand("spGetProducts", con);
+                SqlDataReader dr = cmd.ExecuteReader();
+                while(dr.Read())
+                {
+                    Product product = new Product();
+                    product.ProductId = Convert.ToInt32(dr["ProductId"]);
+                    product.Name = dr["Name"].ToString();
+                    product.Price = Convert.ToDecimal(dr["Price"]);
+                    products.Add(product);
+                }
+                dr.Close();
+                con.Close();
+                return products;
+            }
+        }
+        //Create [adding]
+        public void AddProduct(string Name, decimal? Price)
+        {
+            con = new SqlConnection(strcon);
+            con.Open();
+            cmd = new SqlCommand("spAddProducts",con);
+            cmd.CommandType = CommandType.StoredProcedure;
+
+            SqlParameter paramName = new SqlParameter();
+            paramName.ParameterName = "@Name";
+            paramName.Value = Name;
+            cmd.Parameters.Add(paramName);
+
+            SqlParameter paramPrice = new SqlParameter();
+            paramPrice.ParameterName = "@Price";
+            paramPrice.Value = Price;
+            cmd.Parameters.Add(paramPrice);
+
+            cmd.ExecuteNonQuery();
+            con.Close();
+        }
+        //Update
+        public void UpdateProduct(int ProductId, string Name, decimal? Price)
+        {
+            con = new SqlConnection(strcon);
+            con.Open();
+            cmd = new SqlCommand("spUpdateProducts", con);
+            cmd.CommandType = CommandType.StoredProcedure;
+
+            SqlParameter paramId = new SqlParameter("@ProductId", ProductId);
+            cmd.Parameters.Add(paramId);
+
+            SqlParameter paramName = new SqlParameter("@Name", Name);
+            cmd.Parameters.Add(paramName);
+
+            SqlParameter paramPrice = new SqlParameter("@Price", Price);
+            cmd.Parameters.Add(paramPrice);
+
+            cmd.ExecuteNonQuery();
+            con.Close();
+
+        }
+        //Delete
+        public void DeleteProduct(int ProductId)
+        {
+            con = new SqlConnection(strcon);
+            con.Open();
+            cmd = new SqlCommand("spDeleteProducts", con);
+            cmd.CommandType = CommandType.StoredProcedure;
+
+            cmd.Parameters.AddWithValue("@ProductId", ProductId);
+            cmd.ExecuteNonQuery();
+            con.Close();
+        }
+    }
+}
+
+4. Add reference of Business Layer into your Web API Project.
+      - Created a new Web API Project
+      - Added connection string in Web.Config
+
+<connectionStrings>
+    <add name="ApiConnection" providerName="System.Data.SqlClient" connectionString="Data Source=(local); Initial Catalog=ApiDb; user id=sa; pwd=123"/>
+  </connectionStrings>
+
+    - Add a new Controller  
+        "Web API Controller with Read/Write Actions"
+    - Name it as "ProductsController"
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Web.Http;
+using BusinessLayer.Services;
+
+namespace AmazonAPI.Controllers
+{
+    public class ProductsController : ApiController
+    {
+        ProductsCRUDService db = new ProductsCRUDService();
+        // GET: api/Products
+        public IEnumerable<Product> Get()
+        {
+            return db.GetProducts;
+        }
+
+        // GET: api/Products/5
+        public string Get(int id)
+        {
+            return "value";
+        }
+
+        // POST: api/Products
+        public void Post([FromBody]string value)
+        {
+        }
+
+        // PUT: api/Products/5
+        public void Put(int id, [FromBody]string value)
+        {
+        }
+
+        // DELETE: api/Products/5
+        public void Delete(int id)
+        {
+        }
+    }
+}
+
+	REST
+- Roy Thomas Fielding  introduced REST in 2000.
+- Representational State Transfer
+- REST is an architecture
+- It primary aim is to provide a uniform way to communicate with provider. 
+- It uses simple contstraints to handle communication between consumer and provider.
+- RESTful is a service that uses all REST constraints. It comprises of REST Style.
+- REST uses a simple query request and send XML or JSON response.
+- REST architecture have two common persepectives they are
+	a) Are you building for Software [App]
+	b) Are you building for Service
+
+- If REST is not yet configured for Software or Service then its is known as "Null Style"
+- Null is the starting point of REST.
+- Null style is simply an empty set of constraints.
+
+Client-Server:
+============
+- The first constraint added to REST is Client-Server architectural style.
+- Separation of concerns in the priniciple of Client-Server.
+- Consumer is client and Provider is Server.
+- We can improve the protability of the UI across multiple platforms.
+- Consumer can consume from various devices and OS services.
+- Improves scalability and simiplies the server components.
+
+Stateless
+========
+- The next constraint to the client server interaction is the stateless constraint.
+- As per the rules of REST communication between client and server must be stateless.
+- REST is used over Http
+- Http is a stateless protocol.
+- Each request from cleint to server must contains all the information necessary to understand the request, and can't take advantage of any stored context on the server.
+- Hence the session state is kept entirely on the client.
+- Stateless constraint in REST introduces the features like visibility, reliability and scalablilty.
+- Server doesn't have to manage resource usage across requests.
+
+Cache:
+======
+- It is a constraint used to improve network efficiency.
+- It is important to define the REST request cacheable or non-cacheable.
+- If response is cachable then a client cache is given the right to re-use that response data for later.
+
+Uniform Interface:
+===============
+- The major feature for REST architectural style from other network based styles is its way of handling UI between the components.
+- It optimizes the request and makes it simple.
+- It is a simple Query request.
+- REST is defined by four interface constraints:
+	a) Identification of resources
+	b) Manipulation of resources throught the representations
+	c) Self-descriptive messages
+	d) Hypermedia as the engine of application state.
+Rest Constraints
+		==============
+1. Null 
+2. Client-Server
+3. Stateless
+4. Cache
+5. Uniform Interface
+6. Layered System
+    - To improve the behavior for Internet-scale requirements, we have to add Layered System constraints.
+    - It allows an architecture to be composed of hierarchical layers.
+    - It enable clean separation and easy extensibility.
+    - The primary disadvantage of layered system is that they add overhead and latency to the processing of data.
+	Overhead - Memory Issues
+	Latency	- Time taken for response.
+7. Code-On-Demand
+    - The last constraint added for REST is  "Code-On-Demand-Style.
+    - It introduces Lazy Loading.
+    - It uses Asynchronous Approach
+    - Only the data that is required for specific situation is sent to client.
+
+Note: REST should implement any Architectural patterns to improve the performance. 
+	MVC, MVP, MVVM, MicroServices,
+	Black Board System, Broker Pattern
+	Event Driven Architecture etc..
+
+
+
+	  REST Architectural Elements
+	  ========================
+1. Data Elements
+
+  DataElement	  Modern Web Example
+  -----------------------------------------------------------------------
+  resource	       It is the conceptual target of hypertext
+	       reference. It specifies what to be
+	       delivered for a request.
+  resource Identifer    URI, URL 
+  representation   It specifies the type of content
+	             [Html document, JPG, JSON etc..]
+  representation metadata    Media Type, Last Modifed
+  resource metadata	             Source link, alternatives
+  control data	             Cache-Control
+
+2. Connectors
+    - REST uses various connector types to encapsualte the activities of accessing resources and transferring resource representations.
+    
+    Connector	Example
+    -----------------------------------------------------------------
+    client		libwww [wwwRoot]
+    server		Apache API
+    cache		Browser Cache
+    resolver	bind [DNS] 
+    tunnel		SOCKS, SSL after HTTP connect
+
+- Client initiates communication
+- Server listens and sends response.
+- Cache allows to avoid round trips
+- Resolver translates complete or partial resource identifiers into network native.
+- Tunnel is required for parsing through firewall
+
+3. Components
+    - REST components are responsible for handling overall application functionality or action.
+    
+   Component	Example
+   -------------------------------------------------------------------
+   origin server	IIS, Tomcat
+   gateway		squid CGI, Reverse proxy
+   proxy		Netscape Proxy
+   user agent	Netscape Navigator
+
+   	                REST Views
+- REST architectural views are used to describe how the element work together to form an architecture.
+- REST provides 3 types of views
+	a) Process View
+	b) Connector
+	c) Data
+
+Web API Content Negotiation
+- Content Negotiation is the process of selecting the best representation for a given response when there are multiple representation available.
+- The client should have the ability to decide in which format they want the response, it can be XML or JSON, XML Atom etc.
+- Technically it is client and server negotiation.
+- Web API can understand in which format the client wants response by using following headers of request object.
+	1. Content-type
+	2. Accept
+	3. Accept-Charset
+	4. Accept-Encoding
+	5. Accept-Language
+
+Accept & Content-Type:
+- A request that is sent to the server includes Accept and Content-Type headers.
+- By using these the client sepcifiy the format for the response.
+
+    Content-Type [MIME] : application/xml returns XML
+    Content-Type : application/json return JSON
+    Accept: application/xml returns XML
+    Accept: application/json return JSON
+
+- Depending on Content-Type and Accept value in request object, the server sends the response.
+       "This is Known as Content Negotiation"
+
+Ex:
+1. Create a new Web API Project
+2. Install Entity Framework 6 from NuGet Package Manager and add to references.
+3. Add ConnectionString into Web.Config file
+
+ <connectionStrings>
+    <add name="ApiConnection" providerName="System.Data.SqlClient" connectionString="Data Source=(local); Initial Catalog=ApiDb; user id=sa; pwd=123" />
+  </connectionStrings>
+
+4. Goto "Models" folder and add following files
+	          Product.cs
+using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
+
+namespace AmazonAPI.Models
+{
+    [Table("tblProducts")]
+    public class Product
+    {
+        [Key]
+        public int ProductId { get; set; }
+        public string Name { get; set; }
+        public decimal? Price { get; set; }
+    }
+}
+	
+	          ProductsContext.cs
+using System.Data.Entity;
+namespace AmazonAPI.Models
+{
+    public class ProductsContext : DbContext
+    {
+        public ProductsContext()
+            :base("ApiConnection")
+        {
+        }
+       public DbSet<Product> ProductsTable { get; set; }
+    }
+}
+
+5. Goto Controllers folder and add a new 
+	"Web API 2 Empty Controller"
+	
+	        "DemoController"
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Web.Http;
+using AmazonAPI.Models;
+
+namespace AmazonAPI.Controllers
+{
+    public class DemoController : ApiController
+    {
+        ProductsContext db = new ProductsContext();
+        
+        //GET - api/demo
+        public IHttpActionResult Get()
+        {
+            return Ok(db.ProductsTable.ToList());
+        }
+
+        //GET - api/demo/1
+        public IHttpActionResult Get(int? id)
+        {
+            Product product = db.ProductsTable.Find(id);
+            if(product==null)
+            {
+                return NotFound();
+            }
+            return Ok(product);
+        }
+    }
+}
+
+Understanding Content-Type and Accept in Fiddler:
+- Open Fiddler
+- Start your API Project
+- 
+
+Web API Content Negotiation
+
+FAQ's:
+1. What is Content Negotiation?
+2. Why we need Content Negotiation in Web API?
+3. How does the web API framework know in which format the client expects the response?
+4. How to request data in JSON?
+5. How to request data in XML?
+
+Ex: Testing Content Negotiation on Fiddler
+1. Open Fiddler
+2. Goto "Composer"
+3. Specify
+	Request : GET
+	URL        : https://localhost:44328/api/demo
+4. Click Execute
+5. Double click on response returned in fiddler.
+	[200 OK]
+
+Note : By default the response will be in JSON
+
+6. You can change the response content type into XML by specifying the requested content type in "Composer"
+
+      User-Agent: Fiddler
+      Host: localhost:44328
+      Content-type: application/xml
+
+FAQ: How to handle various formats of data in an application?
+A. Handling various formats of data in an application is managed by "Media-Type formatters".
+
+
+	       Media-Type Formatters
+	       ---------------------------------
+- Media type formatters are the classes that are responsbile for serializing the request/response data. So that the Web  API Framework can understand the requested data format and also send data in the format which the client expects.
+
+Class	                    MIME Type        Purpose
+============================================
+JsonMediaTypeFormatter 	             Handle JSON
+		application/json   format of data.
+		text/json
+-----------------------------------------------------------------------------
+XmlMediaTypeFormatter 	            Handle XML
+		application/xml    format of data
+		text/json
+-----------------------------------------------------------------------------
+
+FAQ: How to return the data in JSON format from Web API Service?
+A. This requires configuration of Media Type Formatting in Web API.
+
+Ex:
+1. Goto "WebApiConfig.cs" in "App_Start" folder
+2. Remove XMLFormatter from Media Type
+
+public static class WebApiConfig
+  {
+  public static void Register(HttpConfiguration config)
+        {
+        config.Formatters.Remove(config.Formatters.XmlFormatter);
+        ....................
+        }
+   }
+
+
+FAQ: How to return the data in XML format from Web API Service?
+A. This requires configuration of Media Type Formatting in Web API.
+
+Ex: Add following into WebApiConfig.cs
+
+ config.Formatters.Remove(config.Formatters.JsonFormatter);
+
+	       Swagger in Web API
+	       =================
+- Swagger is an API explorer
+- It is used in API documentation.
+- API documentation contains Help Pages
+- Help page contains information about the services provided by Web API application.
+- Swagger container API metadata.
+
+Install from NuGet Packages
+- Right Click on Reference
+- Manage NuGet Packages
+- Search for "SwashBuckle" [5.6] 
+
+1. Install SwashBuckle from NuGet Package Manager
+2. Goto "SwaggerConfig.cs" in "App_Start" folder
+3. Enable Swagger
+
+Syntax:
+ public class SwaggerConfig
+ {
+     public static void Register()
+     {
+       var thisAssembly = typeof(SwaggerConfig).Assembly;
+       GlobalConfiguration.Configuration.EnableSwagger(c=> c.SingleApiVersion("v1", "Amazon API")).EnableSwaggerUi();
+     }
+ }
+
+4. Run you API Application
+5. Request the following from URL
+
+        https://localhost:port/swagger
+
+- Request Header
+- Request Body
+- Response Body
+- Response Status Codes
+
+
+	Handling GET request in Web API
+	------------------------------------------------
+- The Get() in API returns list of all products in JSON format.
+	GET	:  api/demo
+
+- The Get(int id) in API returns the product that matches with specified Product Id.
+
+	GET	: api/demo/{id}
+
+- Client can consume the data and present by using
+	"XmlHttpRequest" object
+
+- JavaScript uses "XmlHttpRequest" object
+- JQuery uses "$.Ajax()"  or  "$.getJSON()"
+- Angular Js uses  "$http" service
+- Angular uses  HttpClient  service
+
+
+Consuming the API Data Client Side using JQuery
+------------------------------------------------------------------------
+1. Create a API  Controller with GET requests
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Web.Http;
+using AmazonAPI.Models;
+
+namespace AmazonAPI.Controllers
+{
+    public class DemoController : ApiController
+    {
+        ProductsContext db = new ProductsContext();
+        
+        //GET - api/demo
+        public IHttpActionResult Get()
+        {
+            return Ok(db.ProductsTable.ToList());
+        }
+
+        //GET - api/demo/1
+        public IHttpActionResult Get(int? id)
+        {
+            Product product = db.ProductsTable.Find(id);
+            if(product==null)
+            {
+                return NotFound();
+            }
+            return Ok(product);
+        }
+    }
+}
+
+
+2. Install Bootstrap and JQuery from Nuget Package Manager
+	        Content
+	        |     |_bootstrap.css
+	        |
+	        Scripts
+	              |_jquery.js
+
+3. Add a new HTML Page into project
+	          index.html
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <style>
+        .section {
+            margin-top:30px;
+        }
+    </style>
+    <link rel="stylesheet" href="Content/bootstrap.css" />
+    <script src="Scripts/jquery-3.5.1.js"></script>
+    <script>
+        $(function () {
+            var getallUri = "api/demo";
+            $("#btnGetAll").click(function () {
+                $.getJSON(getallUri, function (data) {
+                    $.each(data, function (key, value) {
+                        $(`<tr><td>${value.ProductId}</td><td>${value.Name}</td><td>${value.Price}</td></tr>`).appendTo("#tbody");
+                    })
+                })
+            })
+        })
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div>
+            <div class="btn-toolbar bg-danger justify-content-between">
+                <h2>Amazon API</h2>
+                <div class="btn-group">                   
+                    <button id="btnGetAll" type="button" class="btn btn-danger">View Products</button>
+                </div>
+            </div>
+        </div>
+        <div class="section">
+            <h2>Products List</h2>
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Product Id</th>
+                        <th>Name</th>
+                        <th>Price</th>
+                    </tr>
+                </thead>
+                <tbody id="tbody">
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>
+
+  
+1. Create a new Database in SQL Server
+	  "ApiDb"
+2. Add a new Table 
+	  "tblProducts"
+       ProductId  int [Pk] - Auto Generated
+       Name varchar
+       Price money
+
+3. Add records into Table
+
+4. Create a new Web API Project
+
+	  "Name : WebApiDemo"
+
+5. Install  "Entity Framework 6"  from Nuget Package Manager.
+
+6. Update or Install  Packages
+	- bootstrap
+	- JQuery
+
+7. Add ConnectionString in Web.Config
+
+<connectionStrings>
+    <add name="ApiConnection" providerName="System.Data.SqlClient" connectionString="Data Source=(local); Initial Catalog=ApiDb; user id=sa; password=123"/>
+  </connectionStrings>
+
+8. Goto Models folder and add class
+	      "Product.cs"
+using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
+
+namespace WebAPIdemo.Models
+{
+    [Table("tblProducts")]
+    public class Product
+    {
+        [Key]
+        public int ProductId { get; set; }
+        public string Name { get; set; }
+        public decimal? Price { get; set; }
+    }
+}
+
+Note: Context and DbSet refers to UOW [ Unit of Work and Repository of Patterns]
+
+9. Add another class into Models folder
+	      "ProductsContext.cs"
+using System.Data.Entity;
+
+namespace WebAPIdemo.Models
+{
+    public class ProductsContext : DbContext
+    {
+        public ProductsContext()
+            :base("ApiConnection")
+        {
+           
+        }
+       public DbSet<Product> ProductsTable { get; set; }
+    }
+}
+
+10. Goto Controllers and Add  a new API controller
+	- Web API 2 Controller Empty
+
+	     "ProductsController"
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Web.Http;
+using WebAPIdemo.Models;
+
+namespace WebAPIdemo.Controllers
+{
+    public class ProductsController : ApiController
+    {
+        ProductsContext db = new ProductsContext();
+
+        //GET - api/products
+        public IHttpActionResult Get()
+        {
+            return Ok(db.ProductsTable.ToList());
+        }
+
+        //GET - api/products/{id}
+        public IHttpActionResult Get(int? id)
+        {
+            Product product = db.ProductsTable.Find(id);
+            if(product==null)
+            {
+                return NotFound();
+            }
+            return Ok(product);
+        }
+    }
+}
+
+Request	URI		Purpose
+-----------------------------------------------------------------------------
+GET	api/products    It returns list of all products
+GET	api/products/1 It returns specific product.
+
+11. Add a new HTML page into project
+	              "index.html"
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Products API</title>
+    <style>
+        .section {
+            margin-top: 50px;
+        }
+    </style>
+    <link rel="stylesheet" href="Content/bootstrap.css" />
+    <script src="Scripts/jquery-3.5.1.js"></script>
+    <script>
+        $(function () {
+            $("#btnAll").click(function () {
+                $.ajax({
+                    url: "api/products"
+                })
+                    .done(function (data) {
+                        $.each(data, function (key, value) {
+                            $(`<tr><td>${value.ProductId}</td><td>${value.Name}</td><td>${value.Price}</td></tr>`).appendTo("#tbody");
+                        })
+                    })
+                    .fail(function () {
+                        alert("Something Went Wrong");
+                    })
+            })
+            $("#btnSearch").click(function () {
+                var id = $("#txtId").val();
+                var apiUrl = "api/products/" + id;
+                $.ajax({
+                    url: apiUrl
+                })
+                    .done(function (data) {
+                        $("#lblId").html(data.ProductId);
+                        $("#lblName").html(data.Name);
+                        $("#lblPrice").html(data.Price);
+                    })
+                    .fail(function () {
+                        alert("Something Went Wrong");
+                    })
+            })
+        })
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h2>Products API</h2>
+        <div class="btn-toolbar bg-danger justify-content-between">
+            <div class="btn-group">
+                <button id="btnAll" class="btn btn-danger">Get All Products</button>
+            </div>
+            <div class="btn-group">
+                <input type="text" id="txtId" class="form-control" placeholder="Product Id" />
+                <button id="btnSearch" class="btn btn-danger">Search</button>
+            </div>
+        </div>
+        <div class="section">
+           <div class="row">
+               <div class="col-6">
+                   <h3>Products List</h3>
+                   <table class="table table-hover">
+                       <thead>
+                           <tr>
+                               <th>Product Id</th>
+                               <th>Name</th>
+                               <th>Price</th>
+                           </tr>
+                       </thead>
+                       <tbody id="tbody">
+
+                       </tbody>
+                   </table>
+               </div>
+               <div class="col-4">
+                   <h3>Details</h3>
+                   <dl>
+                       <dt>Product Id</dt>
+                       <dd id="lblId"></dd>
+                       <dt>Name</dt>
+                       <dd id="lblName"></dd>
+                       <dt>Price</dt>
+                       <dd id="lblPrice"></dd>
+                   </dl>
+               </div>
+           </div>
+        </div>
+    </div>
+</body>
+</html> 
+
+API - POST method
+- It can access the insert data by using "FromBody", which uses FormBody that is a Name and Value collection.
+- Using Model Object to represent the data.
+
+Syntax:
+      public IHttpActionResult AddProduct([FromBody] Product product)
+        {
+            db.ProductsTable.Add(product);
+            db.SaveChanges();
+            return Ok();
+        }
+
+- You can use the Model Properties to represent the data posted.
+
+ [HttpPost]
+        public IHttpActionResult AddProduct([FromBody] string Name, decimal? Price)
+        {
+            Product product = new Product();
+            product.Name = Name;
+            product.Price = Price;
+
+            db.ProductsTable.Add(product);
+            db.SaveChanges();
+            return Ok();
+        }
+
+- According to REST standards after posting the data to API controller method it should return "Created" status code [201].
+
+- You can return status code by using "HttpResonseMessage".
+
+- It is the base for Request and Response messages.
+- It comprises of 
+	a) HttpStatusCode
+	b) HttpResponseHeader
+	c) HttpRequestMessage
+- Request StatusCode can be returned by using 
+	a)Request.CreateResponse()
+	b)Request.CreateErrorResponse()
+
+- CreateResponse() is used while monitoring the aciton.
+- CreateErrorResponse() is used while handling the action.
+
+- Designing POST method in Web API for Development Environment.
+
+Ex:
+1. Create API method with HttpResponseMessage
+
+[HttpPost]
+        public HttpResponseMessage AddProduct([FromBody] Product product)
+        {
+            try
+            {
+                db.ProductsTable.Add(product);
+                db.SaveChanges();
+
+                var message = Request.CreateResponse(HttpStatusCode.Created, product);
+                return message;
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex);
+            }
+        }
+
+2. Open Filder
+3. Goto Composer
+
+Request :  POST 
+URL :    https://localhost:44305/api/products/AddProduct
+
+User-Agent: Fiddler
+Host: localhost:44305
+Content-Type: application/json
+Accept: application/json
+
+
+Request Body:
+{"Name":"Earpods", "Price":12000.33}
+
+4. Click Execute
+5. Double Click on Response URL 
+6. Goto Inspector and see the status "Created"
+
+
+- If method return type "HttpResonseMessage" then it is for development
+- If method return type "IHttpActionResult" then it is for production.
+- For Production a method can be also defined as Void. If action need not return anything as response and just it have to handle the functionality specified then you can define "void".
+- It it is void then it is not an Action method , it is an normal API method, which can also handle requests from client. As at client level it is defined with the request type.
+
+Ex:
+ [HttpPost]
+        public void AddProduct([FromBody] Product product)
+        {
+                db.ProductsTable.Add(product);
+                db.SaveChanges();
+        }
+        
+        
+                                        INdex.html
+                                        
+                                        <!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Products API</title>
+    <style>
+        .section {
+            margin-top: 50px;
+        }
+    </style>
+    <link rel="stylesheet" href="Content/bootstrap.css" />
+    <script src="Scripts/jquery-3.5.1.js"></script>
+    <script src="Scripts/bootstrap.bundle.js"></script>
+    <script>
+        $(function () {
+            $("#btnAll").click(function () {
+                $.ajax({
+                    url: "api/products"
+                })
+                    .done(function (data) {
+                        $.each(data, function (key, value) {
+                            $(`<tr><td>${value.ProductId}</td><td>${value.Name}</td><td>${value.Price}</td></tr>`).appendTo("#tbody");
+                        })
+                    })
+                    .fail(function () {
+                        alert("Something Went Wrong");
+                    })
+            })
+            $("#btnSearch").click(function () {
+                var id = $("#txtId").val();
+                var apiUrl = "api/products/" + id;
+                $.ajax({
+                    url: apiUrl
+                })
+                    .done(function (data) {
+                        $("#lblId").html(data.ProductId);
+                        $("#lblName").html(data.Name);
+                        $("#lblPrice").html(data.Price);
+                    })
+                    .fail(function () {
+                        alert("Something Went Wrong");
+                    })
+            })            
+            $("#btnAddProduct").click(function () {
+
+                var newProduct = {
+                    Name: $("#txtName").val(),
+                    Price: parseFloat($("#txtPrice").val())
+                };              
+                $.ajax({
+                    method: "POST",
+                    url: "api/products/AddProduct",
+                    data: newProduct
+                })
+                alert("Record Inserted");
+                location.reload();
+            })
+        })
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h2>Products API</h2>
+        <div class="btn-toolbar bg-danger justify-content-between">
+            <div class="btn-group">
+                <button id="btnAll" class="btn btn-danger">Get All Products</button>
+                <button id="btnAdd" class="btn btn-danger" data-toggle="modal" data-target="#dialogAddProduct">Add Product</button>
+            </div>
+            <div class="btn-group">
+                <input type="text" id="txtId" class="form-control" placeholder="Product Id" />
+                <button id="btnSearch" class="btn btn-danger">Search</button>
+            </div>
+        </div>
+        <div class="modal fade" id="dialogAddProduct" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3>Add New Product</h3>
+                        <button type="button" class="close" data-dismiss="modal">x</button>
+                    </div>
+                    <div class="modal-body">
+                        <dl>
+                            <dt>Name</dt>
+                            <dd><input type="text" id="txtName" class="form-control" /></dd>
+                            <dt>Price</dt>
+                            <dd><input type="text" id="txtPrice" class="form-control" /></dd>
+                        </dl>
+                    </div>
+                    <div class="modal-footer">
+                        <button id="btnAddProduct" class="btn btn-primary">Add</button>
+                        <button class="btn btn-danger" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="section">
+            <div class="row">
+                <div class="col-6">
+                    <h3>Products List</h3>
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Product Id</th>
+                                <th>Name</th>
+                                <th>Price</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody">
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-4">
+                    <h3>Details</h3>
+                    <dl>
+                        <dt>Product Id</dt>
+                        <dd id="lblId"></dd>
+                        <dt>Name</dt>
+                        <dd id="lblName"></dd>
+                        <dt>Price</dt>
+                        <dd id="lblPrice"></dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+PUT Method
+- It allows to update any entity.
+- It can search for specific entity based on primary key value or specific indexing technique.
+- Entity framework provides LINQ to Enity and Enity SQL Method for updating , which you can use for updating entity.
+	 a) UpdateModel()
+	 b) TryUpdateModel()
+- Put method for Production
+
+ Ex:
+[HttpPut]
+        public void UpdateProduct(int id, [FromBody] Product product)
+        {
+            Product prod = db.ProductsTable.Find(id);
+            prod.Name = product.Name;
+            prod.Price = product.Price;
+
+            db.SaveChanges();
+        }
+
+
+Test:
+      - open fiddler
+      - goto composer
+      - Choose request - PUT
+      - Specify URL:                   http://localhost:44305/api/products/2
+
+          	User-Agent: Fiddler
+	Host: localhost:44305
+	Content-Type: application/json
+	Accept: application/json
+
+      - Define new values in Request Body
+          {"Name": "Nike Sports Shoe", "Price":6100.32 }
+      - Execute
+
+
+- PUT method for development using HttpResponseMessage
+
+  [HttpPut]
+        public HttpResponseMessage UpdateProduct(int id, [FromBody] Product product)
+        {
+            try
+            {
+                var prod = db.ProductsTable.Find(id);
+                if(prod==null)
+                {
+                    return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Product Not Found by Speicfied Id=" + id.ToString());
+                }
+                else
+                {
+                    prod.Name = product.Name;
+                    prod.Price = product.Price;
+                    db.SaveChanges();
+
+                    return Request.CreateResponse(HttpStatusCode.OK, prod);
+                }
+            }
+            catch (Exception ex)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, ex);
+            }
+        }
+
+- PUT Method for development using "IHttpActionResult", which gives access to the HttpStatusCodes without using Request  and Response Object.
+
+Ex:
+ [HttpPut]
+        public IHttpActionResult UpdateProduct(int id, [FromBody] Product product)
+        {
+            try
+            {
+                var prod = db.ProductsTable.Find(id);
+                if(prod==null)
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    prod.Name = product.Name;
+                    prod.Price = product.Price;
+                    db.SaveChanges();
+
+                    return Ok(prod);
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.ToString());
+            }
+        }
+
+API "DELETE" method
+
+Ex:
+[HttpDelete]
+        public IHttpActionResult DeleteProduct(int id)
+        {
+            try
+            {
+                Product product = db.ProductsTable.Find(id);
+                if(product==null)
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    db.ProductsTable.Remove(product);
+                    db.SaveChanges();
+                    return Ok();
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.ToString());
+            }
+        }
+
+Controller Logic
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Web.Http;
+using WebAPIdemo.Models;
+
+namespace WebAPIdemo.Controllers
+{
+    public class ProductsController : ApiController
+    {
+        ProductsContext db = new ProductsContext();
+
+        //GET - api/products
+        public IHttpActionResult Get()
+        {
+            return Ok(db.ProductsTable.ToList());
+        }
+
+        //GET - api/products/{id}
+        public IHttpActionResult Get(int? id)
+        {
+            Product product = db.ProductsTable.Find(id);
+            if(product==null)
+            {
+                return NotFound();
+            }
+            return Ok(product);
+        }
+        //POST - api/products/AddProduct [method name optional]
+        [HttpPost]
+        public void AddProduct([FromBody] Product product)
+        {
+                db.ProductsTable.Add(product);
+                db.SaveChanges();
+        }
+        // PUT - api/products/1
+        [HttpPut]
+        public IHttpActionResult UpdateProduct(int id, [FromBody] Product product)
+        {
+            try
+            {
+                var prod = db.ProductsTable.Find(id);
+                if(prod==null)
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    prod.Name = product.Name;
+                    prod.Price = product.Price;
+                    db.SaveChanges();
+
+                    return Ok(prod);
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.ToString());
+            }
+        }
+        [HttpDelete]
+        public IHttpActionResult DeleteProduct(int id)
+        {
+            try
+            {
+                Product product = db.ProductsTable.Find(id);
+                if(product==null)
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    db.ProductsTable.Remove(product);
+                    db.SaveChanges();
+                    return Ok();
+                }
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.ToString());
+            }
+        }
+    }
+}
+
+
+index.html
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Products API</title>
+    <style>
+        .section {
+            margin-top: 50px;
+        }
+    </style>
+    <link rel="stylesheet" href="Content/bootstrap.css" />
+    <script src="Scripts/jquery-3.5.1.js"></script>
+    <script src="Scripts/bootstrap.bundle.js"></script>
+    <script>
+        $(function () {
+            $("#btnAll").click(function () {
+                $.ajax({
+                    url: "api/products"
+                })
+                    .done(function (data) {
+                        $.each(data, function (key, value) {
+                            $(`<tr><td>${value.ProductId}</td><td>${value.Name}</td><td>${value.Price}</td><td><button class="Edit" data-toggle="modal" data-target="#dialogEditProduct" value=${value.ProductId}>Edit</button></td></tr>`).appendTo("#tbody");
+                        })
+                    })
+                    .fail(function () {
+                        alert("Something Went Wrong");
+                    })
+            })
+            $("#btnSearch").click(function () {
+                var id = $("#txtId").val();
+                var apiUrl = "api/products/" + id;
+                $.ajax({
+                    url: apiUrl
+                })
+                    .done(function (data) {
+                        $("#lblId").html(data.ProductId);
+                        $("#lblName").html(data.Name);
+                        $("#lblPrice").html(data.Price);
+                    })
+                    .fail(function () {
+                        alert("Something Went Wrong");
+                    })
+            })            
+            $("#btnAddProduct").click(function () {
+
+                var newProduct = {
+                    Name: $("#txtName").val(),
+                    Price: parseFloat($("#txtPrice").val())
+                };              
+                $.ajax({
+                    method: "POST",
+                    url: "api/products/AddProduct",
+                    data: newProduct
+                })
+                alert("Record Inserted");
+                location.reload();
+            })
+            $(document).on("click", ".Edit", function () {
+                var id = $(this).val();
+                var apiurl = "api/products/" + id;
+                $.ajax({
+                    url: apiurl
+                })
+                    .done(function (data) {
+                        $("#txtEditId").val(data.ProductId);
+                        $("#txtEditName").val(data.Name);
+                        $("#txtEditPrice").val(data.Price);
+                    })
+                    .fail(function () {
+                        alert("Something went Wrong");
+                    })
+            })
+            $("#btnSaveProduct").click(function () {
+                var newProduct = {
+                    ProductId: $("#txtEditId").val(),
+                    Name: $("#txtEditName").val(),
+                    Price: parseFloat($("#txtEditPrice").val())
+                };
+                $.ajax({
+                    method: "PUT",
+                    url: "api/products/" + newProduct.ProductId,
+                    data: newProduct
+                })
+                alert("Record Updated Successfully..");
+                location.reload();
+            })
+        })
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h2>Products API</h2>
+        <div class="btn-toolbar bg-danger justify-content-between">
+            <div class="btn-group">
+                <button id="btnAll" class="btn btn-danger">Get All Products</button>
+                <button id="btnAdd" class="btn btn-danger" data-toggle="modal" data-target="#dialogAddProduct">Add Product</button>
+            </div>
+            <div class="btn-group">
+                <input type="text" id="txtId" class="form-control" placeholder="Product Id" />
+                <button id="btnSearch" class="btn btn-danger">Search</button>
+            </div>
+        </div>
+        <!--Dialog for Add Product-->
+        <div class="modal fade" id="dialogAddProduct" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3>Add New Product</h3>
+                        <button type="button" class="close" data-dismiss="modal">x</button>
+                    </div>
+                    <div class="modal-body">
+                        <dl>
+                            <dt>Name</dt>
+                            <dd><input type="text" id="txtName" class="form-control" /></dd>
+                            <dt>Price</dt>
+                            <dd><input type="text" id="txtPrice" class="form-control" /></dd>
+                        </dl>
+                    </div>
+                    <div class="modal-footer">
+                        <button id="btnAddProduct" class="btn btn-primary">Add</button>
+                        <button class="btn btn-danger" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--Dialog for Edit Product-->
+        <div class="modal fade" id="dialogEditProduct" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3>Edit Product</h3>
+                        <button type="button" class="close" data-dismiss="modal">x</button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" id="txtEditId" />
+                        <dl>
+                            <dt>Name</dt>
+                            <dd><input type="text" id="txtEditName" class="form-control" /></dd>
+                            <dt>Price</dt>
+                            <dd><input type="text" id="txtEditPrice" class="form-control" /></dd>
+                        </dl>
+                    </div>
+                    <div class="modal-footer">
+                        <button id="btnSaveProduct" class="btn btn-primary">Save</button>
+                        <button class="btn btn-danger" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="section">
+            <div class="row">
+                <div class="col-6">
+                    <h3>Products List</h3>
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Product Id</th>
+                                <th>Name</th>
+                                <th>Price</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody">
+                        </tbody>
+                    </table>
+                </div>
+                <div class="col-4">
+                    <h3>Details</h3>
+                    <dl>
+                        <dt>Product Id</dt>
+                        <dd id="lblId"></dd>
+                        <dt>Name</dt>
+                        <dd id="lblName"></dd>
+                        <dt>Price</dt>
+                        <dd id="lblPrice"></dd>
+                    </dl>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+
+  
+	          Web API2 Routing
+- Routing is a Technique introduced into Web Technologies to create and configure User and SEO friendly URL's.
+- ASP.NET introduced Routing from the .NET Framework 4.5.
+- Routing is implemented in WebForms, MVC, and API
+- Routing allows to specify how to handle request from client.
+
+
+1. Goto "App_Start" folder
+2. Add a new Class file "WebApiConfig.cs"
+
+   public static class WebApiConfig
+    {
+        public static void Register(HttpConfiguration config)
+        {
+               // configure your API services.
+        }
+    }
+
+
+- Routes are configure by using HttpConfiguration object.
+ 
+   Syntax:
+    config.Routes.MapHttpRoute("RouteName", "Template", new { defaults });
+
+
+ Ex:
+ public static class WebApiConfig
+    {
+        public static void Register(HttpConfiguration config)
+        {
+            // Web API routes
+
+            config.Routes.MapHttpRoute("ApiDemo", "nit-{controller}-{id}", new { id= 
+RouteParameter.Optional });
+
+		  (or)
+            config.Routes.MapHttpRoute(
+                  name: "DemoApiRoute",
+                  routeTemplate: "api/{controller}/{id}",
+                  defaults: new { id=RouteParameter.Optional }
+                );        
+        }
+    }
+
+- Route Parameters
+- Route Constraints
+- Attribute Routing
+
+
+
+  
+Route Attributes:
+
+name	        - Just a reference name for route
+routeTemplate -  Specifies the request pattern to be
+	            used in URL.
+	        - Every expression you defined in
+	          pattern is mandatory by default.
+	        - Request is expected in the same
+	          pattern how it is defined in Template
+	 
+    routeTemplate: "api/{controller}"
+
+    - URL is not allowed with any parameter, you can define only  api and controller name.
+    - There is no definition for parameter.
+    - If there is no parameter related definition in Template then the parameters can be passed as QueryString.
+
+             localhost:8080/api/products?id=2
+
+  - You have to configure route parameter
+
+    routeTemplate: "api/{controller}/{id}"
+
+  - This makes  "id" as a mandatory URL parameter.
+  -  How to make id as optional URL Parameter
+
+        defaults : new { id = UrlParameter.Optional }
+
+  - If any action method in API is defined with a different parameter , which is not configured in route then how to define in URL request?
+  A: You can define your parameter as querystring.
+
+                                      or
+       You can use attribute routing
+
+		Attribute Route
+     - It allows you to configure custom route for every controller action individually.
+     - Attribute routes were introduced into ASP.NET from 4.5.
+     - Attribute routes require mapping for HttpAttribute routes.
+    - You can use a "Route" attribute for action methods.
+    - It required mapping for Attribute route in "WebApiConfig"
+
+Syntax:
+         config.MapHttpAttributeRoutes();
+
+Controller:
+         [Route("api/singleproduct/{id}")]
+        public IHttpActionResult Get(int? id)
+        {
+            Product product = db.ProductsTable.Find(id);
+            if(product==null)
+            {
+                return NotFound();
+            }
+            return Ok(product);
+        }
+ 
+	         Route Constraints
+ - A constraint allows to restrict the URL parameter to a specific type of with in specific range.
+ 
+ Ex:
+        [Route("api/singleproduct/{id:range(1,3)}")]
+        public IHttpActionResult Get(int? id)
+        {
+            Product product = db.ProductsTable.Find(id);
+            if(product==null)
+            {
+                return NotFound();
+            }
+            return Ok(product);
+        }
+
+
+Constraint		Example
+alpha			{x:alpha}
+bool			{x:bool}
+datetime			{x:datetime}
+decimal			{x:decimal}
+double			{x:double}
+float			{x:float}
+guid			{x:guid}
+int			{x:int}
+length		{x:length(6)} {x:length(1,20)}
+long		{x:long}
+max		{x:max(10)}
+maxlength	{x:maxlength(10)}
+min		{x:min(10)}
+minlength		{x:minlength(10)}
+range		{x:range(10,50)}
+regex		{x:regex(\+91[0-9]{10})}
+
+
+Web API Core
+- Web API Core runs on the top of  ASP.NET Core
+- Stable ASP.NET Core is 3.1 [LTS]
+- ASP.NET Core can run on
+   .NET Framework  : Build Application for Windows
+   .NET Core Framework : Cross Platform, Open Source
+- ASP.NET Core = Web Forms + MVC + API
+- .NET Core is modular
+- .NET Core is asynchronous
+- .NET Core Faster development cycle
+- Same code runs on Development and Production
+- Cloud Ready 
+- Deploy and Run - New Roslyn JIT Compiler
+
+
+Setup Environment for .NET Core
+1. Download and Install .NET Core 3.1
+
+          https://dotnet.microsoft.com/download
+
+2. Add to your existing VS Studio 2019
+
+Creating a ASP.NET Core Web API Project:
+===================================
+1. Open Visual Studio
+2. Create a new Project
+3. Choose "ASP.NET Core Web Application"
+4. Name : WebApiCoreDemo
+5. Select
+	Framework	: .NET
+	Version		: 3.1
+	Template		: API
+
+	Web API Core Project Infrastructure
+
+Dependencies	: References you need for your app
+		  [NuGet Package Manager]
+
+Controller	s	: Application Logic
+		  [APIController]
+
+appSettings.json	: Application configuration settings
+		 [runtime, framework, connectionstring]
+
+Statup.cs		: It is middleware configuration file.
+		  - Enabling Services for applications
+		  - Managing Connection Context
+		  - Routing Configuration
+		  - Sessions
+		  - CORS
+		  - Cookies
+
+Program.cs	: It contains configuration for 
+		  build, test and deploy.
+
+
+
+	            Entity Framework Core
+Classes:
+========
+      Microsoft.EntityFrameworkCore.SqlServer 
+- DbContext
+- DbSet
+
+LINQ to Entity and Entity SQL Methods:
+=================================
+ToListAsync()
+FindAsync()
+Update()
+SaveChangesAsync()
+Remove()
+[Bind()]                - It is to bind the form data with action
+	             as parameter.
+
+
+
+
+    Implementing all CRUD in Web API Core
+
+1. Create a new ASP.NET Core Web Application
+2. Select "API" template with framework 
+	".NET Core 3.1"
+3. Install Package from Dependencies
+	Microsoft.EntityFrameworkCore.SqlServer [3.1.0]
+
+4. Write ConnectionString in "appSettings.json"
+
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft": "Warning",
+      "Microsoft.Hosting.Lifetime": "Information"
+    }
+  },
+  "AllowedHosts": "*",
+  "ConnectionStrings": {
+    "ApiConnection": "Data Source=(local); Initial Catalog=ApiDb; user id=sa; password=123"
+  }
+}
+
+5. Add a new Folder into project by name "Models"
+
+6. Create Model & Context class to Map to Database and Table
+
+	              "Product.cs"
+
+using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
+
+namespace WebApiCoreDemo.Models
+{
+    [Table("tblProducts")]
+    public class Product
+    {
+        [Key]
+        public int ProductId { get; set; }
+        public string Name { get; set; }
+        public decimal? Price { get; set; }
+    }
+}
+
+Note:
+ - Context Class uses DbContextOptions for current context
+	
+      ProductsContext(DbContextOptions<ProductsContext> options)
+          :base(options)  
+      {
+
+       }
+
+ - DbContextOptions contain information about connection, which is accessed from Middleware.
+ - It is passed in the "base(options)"
+
+		"ProductsContext.cs"
+using Microsoft.EntityFrameworkCore;
+
+namespace WebApiCoreDemo.Models
+{
+    public class ProductsContext : DbContext
+    {
+        public ProductsContext(DbContextOptions<ProductsContext> options)
+            :base(options)
+        {
+
+        }
+        public DbSet<Product> ProductsTable { get; set; }
+    }
+}
+
+7. Goto "Startup.cs"
+
+using Microsoft.EntityFrameworkCore;
+using WebApiCoreDemo.Models;
+
+ public void ConfigureServices(IServiceCollection services)
+        {
+            // below AddControllers()
+
+          services.AddDbContext<ProductsContext>(options => options.UseSqlServer(Configuration.GetConnectionString("ApiConnection")));
+        }
+
+8. Goto Controllers and Add "API Core Controller - Empty"
+	       "ProductsController"
+ 
+Note:
+    - API Controller is derived from "ControllerBase"
+    - It is marked with "[ApiController] " annotation
+    - Route for controller is defined by using "Attribute Routing".
+   
+Syntax:
+    [Route("api/products")]
+    [ApiController]
+    public class ProductsController : ControllerBase
+    {
+    }
+
+	         "ProductsController"
+
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using WebApiCoreDemo.Models;
+
+namespace WebApiCoreDemo.Controllers
+{
+    [Route("api/products")]
+    [ApiController]
+    public class ProductsController : ControllerBase
+    {
+        private ProductsContext _dbContext;
+        public ProductsController(ProductsContext context)
+        {
+            _dbContext = context;
+        }
+        //api - GET
+        public async Task<IEnumerable<Product>> GetProducts()
+        {
+            return await _dbContext.ProductsTable.ToListAsync();
+        }
+        //api - POST
+
+        //api - PUT
+
+        //api - DELETE
+    }
+}
+
+
+  Asynchronous Programming in C#
+	  ==============================
+- Async programming is an alternative for Multi Threading.
+- C# by default uses blocking mechanism
+  [After making request it will wait until response is back, it can process next reuqest only after previous response]
+- Async will introduce Un-Blocking technique.
+  [After making request it will not wait for response, it moves to next request -which ever response is ready it is returned back]
+- In C# "Task Parallel library" allows async approach
+
+	a) async	- UnBlock  
+	b) await	- Child Task [ Indicates that it runs
+			       parallel]
+	c) Task	- Parent Task [Creates the task]
+
+Ex: Blocking Technique [Without Async]
+
+1. Create a new Windows App
+2. Add controls
+	[Button]
+	[Label]
+3. Code
+
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using System.Threading;
+using System.IO;
+
+namespace AsyncDemo
+{
+    public partial class Form1 : Form
+    {
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        private int GetCount()
+        {
+            Thread.Sleep(8000);
+            int count = 0;
+            using(StreamReader reader = new StreamReader(@"C:\WebAPIProjects\help.txt"))
+            {
+                string content = reader.ReadToEnd();
+                count = content.Length;
+            }
+            return count;
+        }
+        private void button1_Click(object sender, EventArgs e)
+        {
+            int count = 0;
+            label1.Text = "Reading Please Wait..";
+            count = GetCount();
+            label1.Text = count + " Characters";
+        }
+    }
+}
+
+Ex: UnBlocking Technique - Task Parallel
+
+Code:
+
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using System.Threading;
+using System.IO;
+
+namespace AsyncDemo
+{
+    public partial class Form1 : Form
+    {
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        private int GetCount()
+        {
+            Thread.Sleep(8000);
+            int count = 0;
+            using(StreamReader reader = new StreamReader(@"C:\WebAPIProjects\help.txt"))
+            {
+                string content = reader.ReadToEnd();
+                count = content.Length;
+            }
+            return count;
+        }
+        private async void button1_Click(object sender, EventArgs e)
+        {
+            int count = 0;
+            label1.Text = "Reading Please Wait..";
+
+            Task<int> task = new Task<int>(GetCount);
+            task.Start();
+
+            count = await task;
+            label1.Text = count + " Characters";
+        }
+    }
+}
+
+Ex: Parallel Foreach
+
+using System;
+using System.Diagnostics;
+using System.Threading;
+using System.Threading.Tasks;
+
+namespace ParallelForEachExample
+{
+    class Program
+    {
+        static void Main()
+        {
+            string[] colors = {
+                                      "1. Red",
+                                      "2. Green",
+                                      "3. Blue",
+                                      "4. Yellow",
+                                      "5. White",
+                                      "6. Black",
+                                      "7. Violet",
+                                      "8. Brown",
+                                      "9. Orange",
+                                      "10. Pink"
+                                  };
+            Console.WriteLine("Traditional foreach loop\n");
+
+            var sw = Stopwatch.StartNew();
+            foreach (string color in colors)
+            {
+                Console.WriteLine("{0}, Thread Id= {1}", color, Thread.CurrentThread.ManagedThreadId);
+                Thread.Sleep(10);
+            }
+            Console.WriteLine("foreach loop execution time = {0} seconds\n", sw.Elapsed.TotalSeconds);
+            Console.WriteLine("Using Parallel.ForEach");
+            sw = Stopwatch.StartNew();
+            Parallel.ForEach(colors, color =>
+            {
+                Console.WriteLine("{0}, Thread Id= {1}", color, Thread.CurrentThread.ManagedThreadId);
+                Thread.Sleep(10);
+            }
+           );
+            Console.WriteLine("Parallel.ForEach() execution time = {0} seconds", sw.Elapsed.TotalSeconds);
+            Console.Read();
+        }
+    }
+}
+	
+           Web API Core Application with Angular Integration
+           ==========================================
+1. Create a new Project
+2. Select "ASP.NET Core Web Application"
+3. Choose  "Angular" Template
+
+	Project Name : WebApiAngular
+	.NET Core	      : 3.1
+
+4. Your project comprises of Server  Side and Client Side app.
+	Server Side : ASP.NET Core with Web API
+	Client Side  : Angular
+
+  Run Server App :  Ctrl + F5
+
+  Run Client App
+  - Download and Install - Node Js for NPM [Node Package Manager] 
+	https://nodejs.org/en/download/
+
+	C:\>node -v
+	C:\>npm -v     [testing version]
+
+  - Install Angular CLI on your PC from command prompt
+
+	C:\>npm install -g @angular/cli@latest
+
+  	C:\>ng --version
+
+
+ - Goto your API Angular Project
+ - Open the Client App location in Command prompt
+ - Run the command
+	
+    C:\.....\ClientApp> npm install
+  
+ - After extracting you can upgrade to latest
+
+  C:\.....\ClientApp> ng update @angular/cli @angular/core
+
+
+- Goto Client APP location in Command Prompt
+- Run
+	> npm install     [package.json]
+
+  It is used to install all packages required for angular application.
+
+Note: All packages are copied into "node_modules" folder,
+          include node_modules into project.
+
+
+  To Run Client Application form command prompt use
+
+	 C:\....\ClientApp> ng serve
+		             npm start
+
+ - Client App Server Starts Listening on : 	      	http://localhost:4200
+ - Open any browser and request
+	http://localhost:4200
+
+	 > ng serve --o   [it starts and opens in browser]
+
+
+
+
+
+	        Web API Core CRUD Operations
+	               [Creating RESTful ]
+- Create ASP.NET Web API Core Application 
+- Install "Entity Framework Core SqlServer" package
+- Goto "appSettings.json" and add Connection String
+
+  {
+  "Logging": {
+      "LogLevel": {
+      "Default": "Information",
+      "Microsoft": "Warning",
+      "Microsoft.Hosting.Lifetime": "Information"
+      }
+    },
+  "AllowedHosts": "*",
+  "ConnectionStrings": {
+    "ApiConnection": "Data Source=(local); Initial Catalog=ApiDb; user id=sa; password=123"
+  }
+}
+
+2. Add a new folder into project by name
+	   "Models"
+
+3. Add a new class file
+		"Product.cs"
+using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
+
+namespace WebApiAngular.Models
+{
+    [Table("tblProducts")]
+    public class Product
+    {
+        [Key]
+        public int ProductId { get; set; }
+        public string Name { get; set; }
+        public decimal? Price { get; set; }
+    }
+}
+
+4. Add Context class into Models
+	      "ProductsContext.cs"
+
+using Microsoft.EntityFrameworkCore;
+
+namespace WebApiAngular.Models
+{
+    public class ProductsContext : DbContext
+    {
+        public ProductsContext(DbContextOptions<ProductsContext> options)
+            :base(options)
+        {
+
+        }
+        public DbSet<Product> ProductsTable { get; set; }
+    }
+}
+
+5. Goto "Startup.cs" [Middleware Configuration]
+
+using Microsoft.EntityFrameworkCore;
+using WebApiAngular.Models;
+
+public void ConfigureServices(IServiceCollection services)
+        {
+           services.AddDbContext<ProductsContext>(options => options.UseSqlServer(Configuration.GetConnectionString("ApiConnection")));
+           // other services
+        }
+
+6. Add a new Controller into "Controllers" folder
+    - Select "API Empty Controller"
+    - Name as "ProductsController"
+
+All action results are derived from "ActionResult" base
+Action methods in API Core Controller will use "ActionResult" are the return type.
+
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using WebApiAngular.Models;
+
+namespace WebApiAngular.Controllers
+{
+    [Route("api/products")]
+    [ApiController]
+    public class ProductsController : ControllerBase
+    {
+        private ProductsContext _dbContext;
+        public ProductsController(ProductsContext context)
+        {
+            _dbContext = context;
+        }
+        //GET - api/products
+        public async  Task<ActionResult<IEnumerable<Product>>> GetProducts()
+        {
+          return await _dbContext.ProductsTable.ToListAsync();
+        }
+    }
+}
+
+
+Client Application 
+	 	[Project Structure]
+
+File / Folder	Description
+=================================================
+e2e		End-to-End configuration for
+		testing your application.
+		[Development, Quality, Production]
+
+src		It comprises of Project resources
+		which includes application resources
+		like component, services, pipes, etc..
+
+angular.json	It contains resources configuration
+		i.e statup page, assets, styles, scripts
+		location etc..
+
+tslint.json		It contains the rules for "TypeScript"
+		language used in Angular.
+
+
+src/app		It contains application resources like
+		component, services etc.
+
+src/assets	It contains non-dynamic files like
+		text, pdf, images etc..
+
+src/index.html	It is the startup file, you application
+		starts with index.html
+
+src/styles.css	It contains global styles , which are
+		accesible to all components.
+
+src/app/app.module.ts    It is the module that configures,
+		       and registers all the modules,
+		       components, services, pipes etc.
+		       Any component that you design
+		      in angular application must be 
+		      registered in "app.module.ts"
+
+
+	       Angular Framework Components
+	      ============================
+
+Component	: It is a template for angular application
+		  It comprises of 
+		  a) Presentation [in HTML]
+		  b) Styles [in CSS]
+		  c) Logic  [in TypeScript]
+
+Service		: It is a predefined business logic which
+		   you can inject into any component.
+		  And handle any specific functionality.
+
+Pipe		: It provides options for filter, sorting
+		  and formatting data.
+
+
+		Services in Angular
+- A service in angular is pre-define business logic, which you re-use  across various components.
+- Angular service is a "TypeScript" class that comprises of Services methods.
+- Service method is designed to return any specifiec functionality.
+
+Creating a new Service:
+=====================
+1. Goto "App" folder in  ClientApp\src
+
+2. Add a new Item ? TypeScript File
+
+3. Name it as "data.service.ts"
+
+
+import { Injectable } from '@angular/core';
+@Injectable()
+export class DataService {
+  public GetProducts() {
+    return [
+      { Name: "TV", Price: 45000.55 },
+      { Name: "Nike Casuals", Price: 1200.44 }
+    ];
+  }
+}
+
+4. Register the service in "app\app.module.ts"
+
+providers: [DataService, ProductsdataService],
+
+Note: You can generate a service by using Angular CLI Command
+              C:...\ClientApp> ng generate service productsdata
+		       		(or)
+		       ng  g  s productsdata
+
+   Client Side Services
+1. Add a new service into Client App
+   - Goto  "app" folder 
+   - Add a new TypeScript file
+   	"productsdata.service.ts"
+
+import { Injectable } from '@angular/core';
+
+@Injectable()
+
+export class ProductsdataService {
+
+  public GetProducts() {
+    return [
+      { Name: "TV", Price: 34000.44 },
+      { Name: "Mobile", Price: 12000.32 },
+      { Name: "Shoe", Price: 3400.32 }
+    ];
+  }  
+}
+
+2. Register the service in "app/app.module.ts"	
+
+import { ProductsdataService } from './productsdata.service';
+
+providers: [ProductsdataService],
+
+3. Create a new Component and Consume the Service
+    - Components are building block for Angular App
+    - Component comprises of 
+	Markup in  ".html"
+	Styles   in  ".css"
+	Logic    in  ".ts"
+     - Goto "app" folder and add a new subfolder by name
+	"consumedata"
+     - Add following files into folder
+	  - consumedata.component.ts
+	  - consumedata.component.html
+	  - consume.data.component.css
+
+4. Goto "consumedata.component.ts"
+
+import { Component, OnInit } from '@angular/core';
+import { ProductsdataService } from '../productsdata.service';
+
+@Component({
+  selector: 'app-consumedata',
+  templateUrl: 'consumedata.component.html',
+  styleUrls: ['consumedata.component.css']
+})
+
+export class ConsumeDataComponent implements OnInit {
+  public products = [];
+  constructor(private data: ProductsdataService) { }
+  ngOnInit() {
+    this.products = this.data.GetProducts();
+  }
+}
+
+5. Goto "consumedata.component.html"
+
+<div class="container">
+  <h2>Products Data</h2>
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Price</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of products">
+         <td>{{item.Name}}</td>
+         <td>{{item.Price}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+6. Goto "consumedata.component.css"
+
+.container {
+    justify-content:center;
+    width:400px;
+    align-items:center;
+    margin:auto;
+    padding:20px;
+    margin-top:30px;
+    border:2px solid darkcyan;
+    box-shadow:2px 2px 4px darkcyan;
+    border-radius:10px;
+}
+
+7. Goto "app.module.ts" and register your component
+
+import { ConsumeDataComponent } from './consumedata/comnsumedata.component';
+
+declarations: [
+      .....................
+       ConsumeDataComponent
+  ]
+ providers: [ProductsdataService],
+ bootstrap: [ConsumeDataComponent]
+
+
+8. Goto Index.html in "src" folder
+
+ <body>
+   <app-consumedata> </app-consumedata>
+ </body>
+
+
+       Consuming Data from ASP.NET Core Web API
+       ======================================
+- You need angular "HttpClient" module to handle Ajax calls
+- You need "rxjs" Observable.
+- rxjs is used for Asynchronous calls from client side.
+
+
+  
+		Angular HttpClient 
+- HttpClient module provides the HttpClient object that comprises of properties and methods that are used to handle interaction with API service.
+- HttpClient uses "XMLHttpRequest" object to handle request from client.
+- It is defined in "@angular/common/http"
+
+Syntax:
+	private http:HttpClient
+	http.get()
+	http.post()
+
+	                  RxJS
+- Reative Extension for JavaScript
+- It introduces Reactive Programming with JavaScript.
+- It deals with Asynchronous calls.
+- RxJs Components
+	a) Observable
+	b) Observer
+	c) Subscription
+	d) Operators
+	e) Subject
+	f) Schedulers
+
+Observable : 
+- It creates a observer
+- It identifies the data type and its structure
+- It source datatype is attached with a function , which inlcudes JavaScript events or HttpRequests.
+
+Subscriber: 
+- It is used to execute the observable.
+- We have to subscribe to the observable.
+
+
+Steps to Communicate with Web API:
+1. Create a new Service
+2. Inject HttpClient Module and Observable
+3. Make an Asynchronous call from Angular Service to Web API RESTful service.
+4. Return functionality by creating a service method.
+5. Inject the service into a component.
+6. Use Subscriber to execute the Observable and store the returned data.
+
+
+Ex:
+1. Goto Client App and Create a  Contract for define the DataStructure
+	- Goto "src\app" folder
+	- Add a new TypeScript file
+	- Name it as "IProduct.ts"
+	
+		"IProduct.ts"
+  	interface IProduct 
+                 {
+  	 ProductId: number;
+ 	 Name: string;
+ 	 Price: number;
+	}
+
+2. Add a new Service into Client App
+
+	>ng generate service  productsdata
+		     (or)
+	>ng g s productsdata
+
+3. A new service is added into "src/app" folder
+
+	      "productsdata.service.ts"
+
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+
+@Injectable()
+export class ProductsdataService {
+  constructor(private http: HttpClient) { }
+  public geturl = "https://localhost:44383/api/products";
+  public GetProducts():Observable<IProduct[]> {
+    return this.http.get<IProduct[]>(this.geturl);
+  }
+}
+
+4. Register service in app.module.ts
+
+import { ProductsdataService } from './productsdata.service';
+
+providers: [ProductsdataService],
+
+5. Create a new Component in your project
+	         "consumedata" [in app folder]
+   	- consumedata.component.ts
+	- consumedata.component.html
+	- consumedata.component.css
+
+6. consumedata.component.ts
+
+  import { Component, OnInit } from '@angular/core';
+import { ProductsdataService } from '../productsdata.service';
+
+
+@Component({
+  selector: 'app-consumedata',
+  templateUrl: 'consumedata.component.html',
+  styleUrls: ['consumedata.component.css']
+})
+
+export class ConsumeDataComponent implements OnInit {
+  public products = [];
+  constructor(private data:ProductsdataService) {
+
+  }
+  ngOnInit() {
+    this.data.GetProducts().subscribe(data => this.products = data);
+  }
+}
+
+7. Goto "consumedata.component.html"
+
+<div class="container">
+  <h2>Products Data</h2>
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Price</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of products">
+         <td>{{item.productId}}</td>
+         <td>{{item.name}}</td>
+         <td>{{item.price}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+8. Goto "app.module.ts"
+
+@NgModule({
+  declarations: [
+     ConsumeDataComponent
+  ]
+    bootstrap: [ConsumeDataComponent]
+  })
+
+9. Goto "index.html"
+
+<body>
+     <app-consumedata></app-consumedata>
+</body>
+  
+10. You can add styles in
+	"consumedata.component.css"
+
+.container {
+    justify-content:center;
+    width:400px;
+    align-items:center;
+    margin:auto;
+    padding:20px;
+    margin-top:30px;
+    border:2px solid darkcyan;
+    box-shadow:2px 2px 4px darkcyan;
+    border-radius:10px;
+}
+
+		Posting Data
+- You need a Form in Angular to post data into API
+- Angular have 2 types of Forms
+	a) Template Driven Form
+	b) Model Driven or Reactive Form
+
+
+  Web API Core with Angular
+1. Create a new ASP.NET Core Web Application
+2. Select "Angular" template
+3. Name it as "WebApiAngular"
+4. Install the Package
+	"Entity Framework Core SqlServer"
+5. Add Connection String in "appSettings.json"
+
+{
+  "Logging": {
+      "LogLevel": {
+      "Default": "Information",
+      "Microsoft": "Warning",
+      "Microsoft.Hosting.Lifetime": "Information"
+      }
+    },
+  "AllowedHosts": "*",
+  "ConnectionStrings": {
+    "ApiConnection": "Data Source=(local); Initial Catalog=ApiDb; user id=sa; password=123"
+  }
+}
+
+6. Add a new folder "Models"
+7. Add following classes
+		"Product.cs"
+using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
+
+namespace WebApiAngular.Models
+{
+    [Table("tblProducts")]
+    public class Product
+    {
+        [Key]
+        public int ProductId { get; set; }
+        public string Name { get; set; }
+        public decimal? Price { get; set; }
+    }
+}
+		ProductsContext.cs
+using Microsoft.EntityFrameworkCore;
+
+namespace WebApiAngular.Models
+{
+    public class ProductsContext : DbContext
+    {
+        public ProductsContext(DbContextOptions<ProductsContext> options)
+            :base(options)
+        {
+
+        }
+        public DbSet<Product> ProductsTable { get; set; }
+    }
+}
+
+8. Goto "Startup.cs"
+
+using Microsoft.EntityFrameworkCore;
+using WebApiAngular.Models;
+
+  public void ConfigureServices(IServiceCollection services)
+        {
+         ...........
+         services.AddDbContext<ProductsContext>(options => options.UseSqlServer(Configuration.GetConnectionString("ApiConnection")));
+         ......
+       }
+
+9. Add a new "Web API Controller - Empty" into Controllers
+
+		"ProductsController"
+
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using WebApiAngular.Models;
+
+namespace WebApiAngular.Controllers
+{
+    [Route("api/products")]
+    [ApiController]
+    public class ProductsController : ControllerBase
+    {
+        private ProductsContext _dbContext;
+        public ProductsController(ProductsContext context)
+        {
+            _dbContext = context;
+        }
+
+        //GET - api/products
+
+        public async  Task<ActionResult<IEnumerable<Product>>> GetProducts()
+        {
+           return await _dbContext.ProductsTable.ToListAsync();
+        }
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Product>> GetProduct(int id)
+        {
+            var product = await _dbContext.ProductsTable.FindAsync(id);
+            if(product==null)
+            {
+                return NotFound();
+            }
+            return Ok(product);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<Product>> PostProduct(Product product)
+        {
+            _dbContext.ProductsTable.Add(product);
+            await _dbContext.SaveChangesAsync();
+            return CreatedAtAction(nameof(GetProduct), new { id=product.ProductId });
+        }
+        [HttpPut("{id}")]
+        public async Task<ActionResult> PutProduct(int id, Product product)
+        {
+            if(id != product.ProductId)
+            {
+                return BadRequest();
+            }
+            _dbContext.Entry(product).State = EntityState.Modified;
+            try
+            {
+                await _dbContext.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (product == null)
+                {
+                    return NotFound();
+                }
+                 else
+                {
+                    throw;
+                }
+            }
+            return NoContent();
+        }
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<Product>> DeleteProduct(int id)
+        {
+            var product = await _dbContext.ProductsTable.FindAsync(id);
+            if(product is null)
+            {
+                return NotFound();
+            }
+            _dbContext.ProductsTable.Remove(product);
+            await _dbContext.SaveChangesAsync();
+            return product;
+        }
+    }
+}
+
+10. Goto ClientApp in Project
+	               Src ? app 
+
+11. Add a new TypeScript File 
+		"IProduct.ts"
+interface IProduct {
+  productId: number;
+  name: string;
+  price: number;
+}
+
+12. Add a new Service into "app" folder
+      - Add a new TypeScript file
+	   "productsdata.service.ts"
+      - You can generate from Angular CLI Commands using command prompt
+	C:\...ClientApp> ng g s productsdata
+
+	  "productsdata.service.ts"
+
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+
+
+@Injectable()
+export class ProductsdataService {
+  constructor(private http: HttpClient) { }
+  public geturl = "https://localhost:44383/api/products";
+  public posturl = "https://localhost:44383/api/products";
+
+  public GetProducts():Observable<IProduct[]> {
+    return this.http.get<IProduct[]>(this.geturl);
+  }
+
+  public AddProducts(data) {
+    return this.http.post(this.posturl, data);
+  }
+}
+
+13. Add a new folder into "src\app" 
+	     "consumedata"
+14. Add following files
+	  consumedata.component.ts
+	  consumedata.component.html
+	  consumedata.component.css
+                               or
+   C:\..ClientApp> ng g c  consumedata
+
+15. Goto "consumedata.component.ts"
+
+import { Component, OnInit } from '@angular/core';
+import { ProductsdataService } from 
+'../productsdata.service';
+
+import { NgForm } from '@angular/forms';
+
+
+@Component({
+  selector: 'app-consumedata',
+  templateUrl: 'consumedata.component.html',
+  styleUrls: ['consumedata.component.css']
+})
+
+export class ConsumeDataComponent implements OnInit {
+  public products = [];
+  constructor(private data:ProductsdataService) {
+
+  }
+  ngOnInit() {
+    this.data.GetProducts().subscribe(data => this.products = data);
+  }
+  public SubmitData(form: NgForm) {
+    let newProduct = {
+      name: form.value.name,
+      price: parseFloat(form.value.price)
+    };
+    this.data.AddProducts(newProduct).subscribe(
+      res => { console.log("Inserted") },
+      err => { console.log(err)}
+    );
+    alert('Record Inserted');
+    location.reload();
+  }
+}
+
+16. Goto "consumedata.component.html"
+
+<div class="container">
+  <h2>Products Data</h2>
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Price</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of products">
+         <td>{{item.name}}</td>
+         <td>{{item.price|currency:'INR'}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<div class="container">
+  <form #form="ngForm" method="post" (submit)="SubmitData(form)" >
+    <h2>Register Product</h2>
+    <dl>
+      <dt>Name</dt>
+      <dd><input name="name" ngModel #name="ngModel" type="text" class="form-control" /></dd>
+      <dt>Price</dt>
+      <dd><input type="text" name="price" ngModel #price="ngModel" class="form-control" /></dd>
+    </dl>
+    <button class="btn btn-primary btn-block">Register</button>
+  </form>
+</div>
+
+17. Goto "app.module.ts"
+
+  providers: [ProductsdataService],
+  bootstrap: [ConsumeDataComponent]
+
+
+	 	CORS
+- CORS is Cross Origin Resource Sharing
+- CORS is not a security feature.
+- CORS is a W3C standard that allows a server to relax the same-origin policy.
+- Browser security prevents a web page from making request to a different domain.
+- The restriction is called as "Same-Origin-Policy"
+- It is more safer that earlier technique "JSONP"
+- CORS Specification comprises of
+	1. General Headers
+		- Request URL
+		- Request Method
+		- Status Code
+	2. Response Header
+		- Content-Encoding
+		- Content-Type
+		- Server
+		- Set-Cookies
+		- Transfer-Encoding
+		- Vary
+	3. Request Headers
+		- Accept
+		- Accept-Encoding
+		- Accpet-Language
+		- Connection
+		- Host
+		- Origin
+		- User-Agent
+
+
+	     Enable CORS for Web API Core
+1. Goto WebAPI Core application
+2. Install a Package
+	"Microsoft.AspNetCore.Cors"
+3. Goto Middleware configuration
+	"Startup.cs"
+// Configure Services
+public void ConfigureServices(IServiceCollection services)
+        {
+        .......
+        services.AddCors();
+        ...........
+        }
+
+// Use Services
+public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        {
+             app.UseCors(options => 
+              options.WithOrigins("http://localhost:8080")
+              .AllowAnyMethod()
+              .AllowAnyHeader()
+            );
+        }
+
+
+Start Your API Application ? Ctrl + F5
+Start Your Client Application from Command Prompt
+	> ng serve --port 8080
+
+
+	    Enable CORS in Web API 2
+	    ======================
+1. Install Package
+
+	"Microsoft.AspNet.WebApi.Cors"
+
+2. Goto "WebApiConfig.cs" in "App_Start"
+
+    public static void Register( .... )
+    {
+           config.EnableCors();
+    }
+     
+3. Goto Web API Controller
+     using System.Web.Http.Cors;
+
+     [EnableCors(origins: "http://localhost:8080", header: "*", methods: "*")]
+     public class ProductsController : ApiController 
+     {
+
+     }
+
+               Web API Authentication and Authorization
+- Authentication and Authorization is handled in Web API by using  Filters.
+- ASP.NET MVC Framework provides Authorization Filters
+	a) Authorize
+	b) AllowAnonymous
+
+OWIN 
+OAuth
+
