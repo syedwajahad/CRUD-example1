@@ -1,0 +1,92 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.UI;
+using System.Web.UI.WebControls;
+using System.Data.SqlClient;
+
+namespace aspproject
+{
+    public partial class employee : System.Web.UI.Page
+    {
+        protected void Page_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        protected void Btnsubmit_Click(object sender, EventArgs e)
+        {
+            SqlConnection con = new SqlConnection("Data Source=(local);Initial Catalog=dbsyed;Integrated Security=True");
+            con.Open();
+            string gen;
+            if(Rdbmale.Checked)
+            {
+                gen = Rdbmale.Text;
+
+            }
+            else
+            {
+                gen = Rdbfemale.Text;
+
+            }
+            SqlCommand cmd = new SqlCommand("insert into employee1 values"+"('" + Txtempid.Text + "','" + Txtempname.Text + "','" + gen + "','" + Drpcity.SelectedItem.Text + "','" + Txtdob.Text + "')", con);
+            cmd.ExecuteNonQuery();
+            con.Close();
+            Label1.Text = "registered successfully";
+            
+        }
+
+        protected void Calendar1_SelectionChanged(object sender, EventArgs e)
+        {
+            Txtdob.Text = Calendar1.SelectedDate.ToShortDateString();
+        }
+
+        protected void Drpcity_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        protected void Btnupdate_Click(object sender, EventArgs e)
+        {
+            SqlConnection con = new SqlConnection("Data Source=(local);Initial Catalog=dbsyed;Integrated Security=True");
+            con.Open();
+            string gen;
+            if (Rdbmale.Checked)
+            {
+                gen = Rdbmale.Text;
+
+            }
+            else
+            {
+                gen = Rdbfemale.Text;
+
+            }
+            SqlCommand cmd = new SqlCommand("update employee1 set empname='" + Txtempname.Text+"',gender='" + gen + "',city='" + Drpcity.SelectedItem.Text + "',dob='" + Txtdob.Text + "' where empid='" + Txtempid.Text + "'", con);
+            cmd.ExecuteNonQuery();
+            con.Close();
+            Label1.Text = "updated successfully";
+        }
+
+        protected void Btndelete_Click(object sender, EventArgs e)
+        {
+            SqlConnection con = new SqlConnection("Data Source=(local);Initial Catalog=dbsyed;Integrated Security=True");
+            con.Open();
+            string gen;
+            if (Rdbmale.Checked)
+            {
+                gen = Rdbmale.Text;
+
+            }
+            else
+            {
+                gen = Rdbfemale.Text;
+
+            }
+            SqlCommand cmd = new SqlCommand("delete from employee1 where empid='" + Txtempid.Text + "'", con);
+            cmd.ExecuteNonQuery();
+            con.Close();
+            Label1.Text = "deleted successfully";
+        }
+    }
+}
