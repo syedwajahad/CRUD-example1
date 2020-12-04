@@ -5,3 +5,8 @@ https://tutorialslink.com/Articles/CRUD-operations-using-AngularJs-in-Aspnet-MVC
 
 
 https://github.com/br3ndonland/udacity-fsnd-flask-catalog
+
+
+
+
+https://www.rithmschool.com/courses/flask-fundamentals/crud-with-flask
