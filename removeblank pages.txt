@@ -1,0 +1,151 @@
+ public void DeleteInternalHyperlinks(RegOpsQC rObj, string path)
+        {
+            try
+
+            {
+                string res = string.Empty;
+                bool flag = true;
+                sourcePath = path + "//" + rObj.File_Name;
+                rObj.CHECK_START_TIME = DateTime.Now;
+                string pageNumbers = "";
+                Document pdfDocument = new Document(sourcePath);
+                if (pdfDocument.Pages.Count != 0)
+                {
+                    //foreach (Aspose.Pdf.Page page in pdfDocument.Pages)
+                    for (int i = 1; i <= pdfDocument.Pages.Count; i++)
+                    {
+                        Page page = pdfDocument.Pages[i];
+                        AnnotationSelector selector = new AnnotationSelector(new Aspose.Pdf.Annotations.LinkAnnotation(page, Aspose.Pdf.Rectangle.Trivial));
+                        page.Accept(selector);
+                        IList<Annotation> list = selector.Selected;
+                        foreach (LinkAnnotation a in list)
+                        {
+                            try
+                            {
+                                try
+                                {
+                                    string URL1 = ((Aspose.Pdf.Annotations.GoToAction)a.Action).ToString();
+                                    if (URL1 != "")
+                                    {
+                                        flag = false;
+                                        if (pageNumbers == "")
+                                        {
+                                            pageNumbers = page.Number.ToString() + ", ";
+                                        }
+                                        else if ((!pageNumbers.Contains(page.Number.ToString() + ",")))
+                                            pageNumbers = pageNumbers + page.Number.ToString() + ", ";
+                                    }
+                                }
+                                catch (Exception ex)
+                                {
+
+                                }                                
+                                
+                            }
+                            catch (Exception ex)
+                            {
+
+                            }
+                        }
+                        page.FreeMemory();
+                    }
+                    if (flag == false)
+                    {
+                        rObj.Comments = "Internal hyperlinks exist in page(s):" + pageNumbers.Trim().TrimEnd(',');
+                        rObj.QC_Result = "Failed";
+                    }
+                    else if (flag)
+                    {
+                        rObj.Comments = "Internal hyperlinks not existed in the document";
+                        rObj.QC_Result = "Passed";
+                    }
+                }
+                else
+                {
+                    rObj.Comments = "There are no pages in the document";
+                    rObj.QC_Result = "Failed";
+                }
+                rObj.CHECK_END_TIME = DateTime.Now;
+            }
+            catch (Exception ex)
+            {
+                ErrorLogger.Error("JOB_ID:" + rObj.Job_ID + ", CHECK NAME: " + rObj.Check_Name + "\n" + ex);
+                rObj.Job_Status = "Error";
+                rObj.QC_Result = "Error";
+                rObj.Comments = "Technical error: " + ex.Message;
+            }
+        }
+        /// <summary>
+        /// Delete Internal
+        /// </summary>
+        /// <param name="rObj"></param>
+        /// <param name="path"></param>
+        public void DeleteInternalHyperlinksFix(RegOpsQC rObj, string path)
+        {
+            try
+            {
+                string res = string.Empty;
+                bool flag = true;
+                sourcePath = path + "//" + rObj.File_Name;
+                rObj.CHECK_START_TIME = DateTime.Now;
+                Document pdfDocument = new Document(sourcePath);
+                if (pdfDocument.Pages.Count != 0)
+                {
+                    foreach (Aspose.Pdf.Page page in pdfDocument.Pages)
+                    {
+                        AnnotationSelector selector = new AnnotationSelector(new Aspose.Pdf.Annotations.LinkAnnotation(page, Aspose.Pdf.Rectangle.Trivial));
+                        page.Accept(selector);
+                        IList<Annotation> list = selector.Selected;
+                        foreach (LinkAnnotation a in list)
+                        {
+                            if (a.Action == null)
+                                page.Annotations.Remove(a);
+                            else if (a.Action.GetType().FullName == "Aspose.Pdf.Annotations.GoToAction")
+                            {
+                                try
+                                {
+                                    flag = false;
+                                    TextFragmentAbsorber ta = new TextFragmentAbsorber();
+                                    Aspose.Pdf.Rectangle rect = a.Rect;
+                                    ta.TextSearchOptions = new TextSearchOptions(rect);
+                                    ta.Visit(page);
+                                    foreach (TextFragment tf in ta.TextFragments)
+                                    {
+                                        string txt = tf.Text;
+                                        if (txt.Trim() != "" && tf.Rectangle.LLX >= (rect.LLX - 3) && tf.Rectangle.URX <= (rect.URX + 3) && tf.Rectangle.LLY >= (rect.LLY - 3) && tf.Rectangle.URY <= (rect.URY + 3))
+                                        {
+                                            tf.TextState.Underline = false;
+                                            tf.TextState.ForegroundColor = Aspose.Pdf.Color.Black;
+                                        }
+                                    }
+                                    page.Annotations.Remove(a);
+                                }
+                                catch (Exception ex)
+                                {
+                                    ErrorLogger.Error(ex);
+                                }
+                            }
+                        }
+                        page.FreeMemory();
+                    }
+                    if (flag == false)
+                    {
+                        rObj.Comments = rObj.Comments + ". These are fixed.";
+                        rObj.QC_Result = "Fixed";
+                    }
+                }
+                else
+                {
+                    rObj.QC_Result = "Failed";
+                    rObj.Comments = "There are no pages in the document";
+                }
+                pdfDocument.Save(sourcePath);
+                rObj.CHECK_END_TIME = DateTime.Now;
+            }
+            catch (Exception ex)
+            {
+                ErrorLogger.Error("JOB_ID:" + rObj.Job_ID + ", CHECK NAME: " + rObj.Check_Name + "\n" + ex);
+                rObj.Job_Status = "Error";
+                rObj.QC_Result = "Error";
+                rObj.Comments = "Technical error: " + ex.Message;
+            }
