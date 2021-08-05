@@ -2,3 +2,10 @@ And   TO_DATE(sub.Created_Date,'DD-MON-YY')
 BETWEEN(SELECT TO_DATE ('24/03/21','MM/DD/YYYY HH:MI:SS AM')  FROM DUAL) AND 
 (SELECT TO_DATE('08/04/21','MM/DD/YYYY HH:MI:SS AM') FROM DUAL)
 order by sub.SID; 
+
+------------------
+
+And   sub.Created_Date::date
+BETWEEN '24-03-2021'::date  AND 
+ '08-04-2021'::date
+order by sub.SID;
