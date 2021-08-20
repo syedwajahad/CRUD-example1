@@ -1,0 +1,50 @@
+ string Pagenumber = string.Empty;
+                                                List<int> lst=new List<int>();
+                                                LayoutCollector layout = new LayoutCollector(doc);
+                                                foreach (Paragraph paragraph in doc.GetChildNodes(NodeType.Paragraph, true))
+                                                {
+                                                    ArrayList secRevisions = new ArrayList();
+                                                    RevisionCollection rev1 = doc.Revisions;
+                                                    foreach (Revision rev in rev1)
+                                                    {
+                                                        if (rev.RevisionType != RevisionType.StyleDefinitionChange)
+                                                        {
+                                                            if (rev.ParentNode.GetAncestor(NodeType.Paragraph) != null &&
+                                                            rev.ParentNode.GetAncestor(NodeType.Paragraph) == paragraph)
+                                                            {
+                                                                secRevisions.Add(rev);
+                                                                if (layout.GetStartPageIndex(paragraph) != 0)
+                                                                    lst.Add(layout.GetStartPageIndex(paragraph));
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                                foreach (Table table in doc.GetChildNodes(NodeType.Table, true))
+                                                {
+                                                    ArrayList secRevisions = new ArrayList();
+                                                    RevisionCollection rev1 = doc.Revisions;
+                                                    foreach (Revision rev in rev1)
+                                                    {
+                                                        if (rev.RevisionType != RevisionType.StyleDefinitionChange)
+                                                        {
+                                                            if (rev.ParentNode.GetAncestor(NodeType.Table) != null &&
+                                                            rev.ParentNode.GetAncestor(NodeType.Table) == table)
+                                                            {
+                                                                secRevisions.Add(rev);
+                                                                if (layout.GetStartPageIndex(table) != 0)
+                                                                    lst.Add(layout.GetStartPageIndex(table));
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                                List<int> lst1 = lst.Distinct().ToList();
+                                                if (lst1.Count > 0)
+                                                {
+                                                    lst1.Sort();
+                                                    Pagenumber = string.Join(", ", lst1.ToArray());
+                                                    doc.AcceptAllRevisions();
+                                                    doc.TrackRevisions = false;
+                                                    rObj.QC_Result = "Fixed";
+                                                    rObj.Comments = "Track changes,Format changes and comments exist in Page Numbers: " + Pagenumber + ". These are fixed.";
+                                                }
+
