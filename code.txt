@@ -1,0 +1,73 @@
+ LOAStyle = doc.Styles.Where(x => ((Style)x).Name.ToUpper() == "List of Appendices" || ((Style)x).StyleIdentifier.ToString().ToUpper() == "List of Appendices".ToString().ToUpper()).FirstOrDefault<Style>();
+
+
+
+            if (LOAStyle == null)
+            {
+
+                CheckStyles = CheckStyles + "List of Appendices" + ",";
+
+            }
+
+
+
+
+            List<Node> FieldNodes = doc.GetChildNodes(NodeType.Any, true).Where(x => (x.NodeType == NodeType.FieldStart || x.NodeType == NodeType.FieldEnd)).ToList();
+            foreach (Node start in FieldNodes)
+            {
+                if (!isTocExisted && start.NodeType == NodeType.FieldStart && ((FieldStart)start).FieldType == FieldType.FieldTOC)
+                {
+                    isTocExisted = true;
+                    TOCBeginNode = start;
+                }
+                if (isTocExisted && start.NodeType == NodeType.FieldEnd && ((FieldEnd)start).FieldType == FieldType.FieldTOC)
+                {
+                    TOCEndNode = start;
+                }
+            }
+
+
+
+            if (LOAStyle != null)
+            {
+
+
+
+                //if (TOCEndNode.ParentNode.Range.Text.Trim() != "")
+                //{
+
+
+                //    Paragraph par = new Paragraph(doc);
+                //    if (TOCEndNode.NextSibling != null)
+                //    {
+                //        Run run = (Run)TOCEndNode.NextSibling;
+                //        Paragraph pr1 = (Paragraph)run.ParentParagraph;
+                //        pr1.ParentSection.Body.InsertAfter(par, pr1);
+                //        builder.MoveTo(par);
+                //    }
+                //    else
+                //        builder.MoveTo(TOCEndNode.ParentNode);
+
+                //}
+                //else
+                //    builder.MoveTo(TOCEndNode.ParentNode);
+                //if (LoaCaptionFieldseq.Count > 12)
+                builder.InsertBreak(BreakType.SectionBreakNewPage);
+                builder.ParagraphFormat.Style = LOAStyle;
+                builder.ParagraphFormat.Alignment = ParagraphAlignment.Center;
+                builder.Writeln("LIST OF APPENDICES");
+                builder.CurrentParagraph.ParagraphFormat.ClearFormatting();
+                builder.InsertTableOfContents("TOC \\h \\z \\c \"Appendix\"");
+
+                if (TOCEndNode.ParentNode.NextSibling != null && !TOCEndNode.ParentNode.NextSibling.Range.Text.Contains(ControlChar.PageBreak))
+                {
+                    if (doc.Sections[0].PageSetup.Orientation == Orientation.Landscape)
+                    {
+                        builder.CurrentSection.PageSetup.Orientation = Orientation.Portrait;
+                        builder.InsertBreak(BreakType.SectionBreakNewPage);
+                        builder.CurrentSection.PageSetup.Orientation = Orientation.Landscape;
+                    }
+
+
+
+                }
