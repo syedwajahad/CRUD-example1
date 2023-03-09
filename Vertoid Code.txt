@@ -77,3 +77,7 @@ class Program
             Console.ReadLine();
             }
         }
+        
+        Output
+        Closest distance: 2.8284271247461903
+        Closest points: (1,2), (3,4)
