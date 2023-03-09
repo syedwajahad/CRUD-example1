@@ -2,21 +2,7 @@ class Program
     {
         static void Main()
         {
-            //Document doc = new Document("E:\\output.doc");
-
-            //FindReplaceOptions options = new FindReplaceOptions();
-            //options.UseSubstitutions = true;
-            //// This is added for testing purposes
-            //options.ApplyFont.HighlightColor = Color.Yellow;
-            //NodeCollection paragraphs = doc.GetChildNodes(NodeType.Paragraph, true);
-            //foreach (Paragraph pr in paragraphs)
-            //{
-
-            //    pr.Range.Replace(new Regex("([≥±<>])\\s+"), "$1", options);
-
-
-            //}
-            //doc.Save("E:\\output2.doc");
+            
             string xyz = "https://www.plmcadutilities.com";
 
             // Split the string into parts
