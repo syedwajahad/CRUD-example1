@@ -1,17 +1,39 @@
-string xyz = "https://www.plmcadutilities.com";
+class Program
+    {
+        static void Main()
+        {
+            //Document doc = new Document("E:\\output.doc");
 
-// Split the string into parts
-string[] parts = xyz.Split("://");   // Split the string at the "://" delimiter
+            //FindReplaceOptions options = new FindReplaceOptions();
+            //options.UseSubstitutions = true;
+            //// This is added for testing purposes
+            //options.ApplyFont.HighlightColor = Color.Yellow;
+            //NodeCollection paragraphs = doc.GetChildNodes(NodeType.Paragraph, true);
+            //foreach (Paragraph pr in paragraphs)
+            //{
 
-// Extract the relevant parts
-string protocol = parts[0];         // The protocol (e.g., "https")
-string[] domainParts = parts[1].Split('.'); // Split the remaining string at the "." delimiter
-string subdomain = domainParts[0];  // The subdomain (e.g., "www")
-string domain = domainParts[1];     // The domain (e.g., "plmcadutilities")
-string extension = domainParts[2];  // The extension (e.g., "com")
+            //    pr.Range.Replace(new Regex("([≥±<>])\\s+"), "$1", options);
 
-// Print the results
-Console.WriteLine("Protocol: " + protocol);
-Console.WriteLine("Subdomain: " + subdomain);
-Console.WriteLine("Domain: " + domain);
-Console.WriteLine("Extension: " + extension);
+
+            //}
+            //doc.Save("E:\\output2.doc");
+            string xyz = "https://www.plmcadutilities.com";
+
+            // Split the string into parts
+            string[] parts = xyz.Split(':');   // Split the string at the "://" delimiter
+
+            // Extract the relevant parts
+            string protocol = parts[0];         // The protocol (e.g., "https")
+            string[] domainParts = parts[1].Split('.'); // Split the remaining string at the "." delimiter
+            string address = domainParts[0];  // The subdomain (e.g., "www")
+            string website = domainParts[1];     // The domain (e.g., "plmcadutilities")
+            string extension = domainParts[2];  // The extension (e.g., "com")
+
+            // Print the results
+            Console.WriteLine("Protocol: " + protocol);
+            Console.WriteLine("Address: " + address);
+            Console.WriteLine("Website: " + website);
+            Console.WriteLine("Extension: " + extension);
+            Console.ReadLine();
+        }
+    }
