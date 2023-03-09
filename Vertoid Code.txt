@@ -3,26 +3,17 @@ class Program
         static void Main()
         {
             
-            string xyz = "https://www.plmcadutilities.com";
+           string xyz = "https://www.plmcadutilities.com";
 
             // Split the string into parts
-            //string[] parts = xyz.Split(':');   // Split the string at the "://" delimiter
-             string[] parts = xyz.Split(new char[] { '.', '/' });
-             
-              string xyz = "https://www.plmcadutilities.com";
-        string[] parts = xyz.Split(new char[] { '.', '/' });
-
-        string protocol = parts[0];         // "https"
-        string subdomain = parts[1];        // "www"
-        string domain = parts[2];           // "plmcadutilities"
-        string topLevelDomain = parts[3];   // "com"
+            string[] parts = xyz.Split(':');   
 
             // Extract the relevant parts
-            string protocol = parts[0];         // The protocol (e.g., "https")
-            string[] domainParts = parts[1].Split('.'); // Split the remaining string at the "." delimiter
-            string address = domainParts[0];  // The subdomain (e.g., "www")
-            string website = domainParts[1];     // The domain (e.g., "plmcadutilities")
-            string extension = domainParts[2];  // The extension (e.g., "com")
+            string protocol = parts[0];         
+            string[] domainParts = parts[1].Split('.'); 
+            string address = domainParts[0];  
+            string website = domainParts[1];   
+            string extension = domainParts[2]; 
 
             // Print the results
             Console.WriteLine("Protocol: " + protocol);
