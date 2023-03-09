@@ -131,3 +131,59 @@ FindClosestPoints(x, y, z, out closestA, out closestB, out closestDistance);
 
 Console.WriteLine("Closest points are ({0}, {1}) and ({2}, {3})", closestA.X, closestA.Y, closestB.X, closestB.Y);
 Console.WriteLine("Closest distance is {0}", closestDistance);
+
+
+
+Another MEthod
+using System;
+
+public class Point {
+    public double x, y, z;
+    public Point(double x, double y, double z) {
+        this.x = x;
+        this.y = y;
+        this.z = z;
+    }
+}
+
+public class ClosestPoints {
+    public static double GetClosestPoints(Point x, Point y, Point z, ref Point closept1, ref Point closept2) {
+        double dist_xy = GetDistance(x, y);
+        double dist_xz = GetDistance(x, z);
+        double dist_yz = GetDistance(y, z);
+
+        if (dist_xy <= dist_xz && dist_xy <= dist_yz) {
+            closept1 = x;
+            closept2 = y;
+            return dist_xy;
+        } else if (dist_xz <= dist_xy && dist_xz <= dist_yz) {
+            closept1 = x;
+            closept2 = z;
+            return dist_xz;
+        } else {
+            closept1 = y;
+            closept2 = z;
+            return dist_yz;
+        }
+    }
+
+    private static double GetDistance(Point a, Point b) {
+        double dx = a.x - b.x;
+        double dy = a.y - b.y;
+        double dz = a.z - b.z;
+        return Math.Sqrt(dx * dx + dy * dy + dz * dz);
+    }
+}
+
+public class Program {
+    public static void Main() {
+        Point x = new Point(1, 2, 3);
+        Point y = new Point(4, 5, 6);
+        Point z = new Point(7, 8, 9);
+        Point closept1 = null;
+        Point closept2 = null;
+        double distance = ClosestPoints.GetClosestPoints(x, y, z, ref closept1, ref closept2);
+        Console.WriteLine("Closest distance: " + distance);
+        Console.WriteLine("Closest points: (" + closept1.x + ", " + closept1.y + ", " + closept1.z + "), (" + closept2.x + ", " + closept2.y + ", " + closept2.z + ")");
+    }
+}
