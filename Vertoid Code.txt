@@ -136,9 +136,7 @@ Console.WriteLine("Closest distance is {0}", closestDistance);
 
 Another MEthod
 
- class Program
-    {
-    public class Point
+public class Point
         {
             public double x, y, z;
             public Point(double x, double y, double z)
@@ -200,6 +198,5 @@ Another MEthod
                 Console.WriteLine("Closest points: (" + closept1.x + ", " + closept1.y + ", " + closept1.z + "), (" + closept2.x + ", " + closept2.y + ", " + closept2.z + ")");
                 Console.ReadLine();
             }
-        }
         }
 
