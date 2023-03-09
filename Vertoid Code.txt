@@ -87,3 +87,46 @@ class Program
         Output
         Closest distance: 2.8284271247461903
         Closest points: (1,2), (3,4)
+        
+        
+        Anoother Method
+        public void FindClosestPoints(Point x, Point y, Point z, out Point closestA, out Point closestB, out double closestDistance)
+{
+    double distanceXY = f(x, y);
+    double distanceXZ = f(x, z);
+    double distanceYZ = f(y, z);
+
+    // Check if x and y are the closest points
+    if (distanceXY <= distanceXZ && distanceXY <= distanceYZ)
+    {
+        closestA = x;
+        closestB = y;
+        closestDistance = distanceXY;
+    }
+    // Check if x and z are the closest points
+    else if (distanceXZ <= distanceXY && distanceXZ <= distanceYZ)
+    {
+        closestA = x;
+        closestB = z;
+        closestDistance = distanceXZ;
+    }
+    // Otherwise, y and z are the closest points
+    else
+    {
+        closestA = y;
+        closestB = z;
+        closestDistance = distanceYZ;
+    }
+}
+
+Point x = new Point(0, 0);
+Point y = new Point(1, 1);
+Point z = new Point(2, 2);
+
+Point closestA, closestB;
+double closestDistance;
+
+FindClosestPoints(x, y, z, out closestA, out closestB, out closestDistance);
+
+Console.WriteLine("Closest points are ({0}, {1}) and ({2}, {3})", closestA.X, closestA.Y, closestB.X, closestB.Y);
+Console.WriteLine("Closest distance is {0}", closestDistance);
