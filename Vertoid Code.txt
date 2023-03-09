@@ -6,7 +6,8 @@ class Program
             string xyz = "https://www.plmcadutilities.com";
 
             // Split the string into parts
-            string[] parts = xyz.Split(':');   // Split the string at the "://" delimiter
+            //string[] parts = xyz.Split(':');   // Split the string at the "://" delimiter
+             string[] parts = xyz.Split(new char[] { '.', '/' });
 
             // Extract the relevant parts
             string protocol = parts[0];         // The protocol (e.g., "https")
