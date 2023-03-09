@@ -1,0 +1,17 @@
+string xyz = "https://www.plmcadutilities.com";
+
+// Split the string into parts
+string[] parts = xyz.Split("://");   // Split the string at the "://" delimiter
+
+// Extract the relevant parts
+string protocol = parts[0];         // The protocol (e.g., "https")
+string[] domainParts = parts[1].Split('.'); // Split the remaining string at the "." delimiter
+string subdomain = domainParts[0];  // The subdomain (e.g., "www")
+string domain = domainParts[1];     // The domain (e.g., "plmcadutilities")
+string extension = domainParts[2];  // The extension (e.g., "com")
+
+// Print the results
+Console.WriteLine("Protocol: " + protocol);
+Console.WriteLine("Subdomain: " + subdomain);
+Console.WriteLine("Domain: " + domain);
+Console.WriteLine("Extension: " + extension);
